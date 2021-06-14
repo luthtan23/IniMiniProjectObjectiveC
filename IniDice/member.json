@@ -1,0 +1,94 @@
+{
+    "data" : [
+        {
+           "name":"Merry Algrestine CS",
+           "role":"iOS Developer",
+           "birthPlace":"Cirebon, 31 Agustus 1960",
+           "address":"BTN Caruban Blok B1 No.9 Kec. Susukan Kab. Cirebon",
+           "hobby":"playing game, watching movie, culinary, traveling",
+           "motivation":"do the best you can",
+           "image":"mba-merry-image"
+        },
+        {
+            "name":"Edi Susanto",
+            "role":"Android Developer",
+            "birthPlace":"Jogjakarta, 20 Desember 1990",
+            "address":"Jl. Pondok Cabe 4. gg. Selada 1 No.50. Pondok Cabe ilir, Pamulang, Tangerang Selatan",
+            "hobby":"-",
+            "motivation":"-",
+            "image":"mas-edi-image"
+        },
+        {
+            "name":"Vina Yuliani",
+            "role":"iOS Developer",
+            "birthPlace":"Batu, 11 Juli 1995",
+            "address":"Villa Mutiara 2 Blok A3 no 26",
+            "hobby":"Mager, Masak, Bikin kue",
+            "motivation":"Ambil Risiko, Bermimpi Besar, dan Berharap Besar",
+            "image":"mba-vina-image"
+        },
+        {
+            "name":"Yana Wahyuna",
+            "role":"Android Developer",
+            "birthPlace":"7 Februari 1994",
+            "address":"perum meadow green, cikarang selatan",
+            "hobby":"nonton random facts videos",
+            "motivation":"selamat dunia akhirat bareng2",
+            "image":"mas-yana-image"
+        },
+        {
+            "name":"Ivan Prasetyo Nugroho",
+            "role":"iOS Developer",
+            "birthPlace":"Sukoharjo, 26 Maret 1998",
+            "address":"Jl. Merak VII Blok J2 No. 5, Mekarmukti, Cikarang Utara",
+            "hobby":"Main PES ngalahin Chelsea pake Arsenal & Nge-drakor",
+            "motivation":"ความสุขไม่ใช่ของสำเร็จรูป แต่มาจากการกระทำของเราเอง",
+            "image":"mas-ivan-image"
+        },
+        {
+            "name":"Andika Fajar Isnanto",
+            "role":"iOS Developer",
+            "birthPlace":"London, 2 Juli 1998",
+            "address":"Jl. Durian No. 53 Depok, Sleman-Yogyakarta",
+            "hobby":"Netchill and flix",
+            "motivation":"yok bisa yok",
+            "image":"mas-dika-image"
+        },
+        {
+            "name":"Wing WIra Adimas Ramadhan",
+            "role":"Android Developer",
+            "birthPlace":"Jakarta, 7 Febuari 1997",
+            "address":"Jalan Warujaya No.13",
+            "hobby":"nyapu kebon",
+            "motivation":"tidur siang adalah hak semua manusia",
+            "image":"mas-wing-image"
+        },
+        {
+            "name":"Yelsa Ferdias Dwi Prastika",
+            "role":"Android Developer",
+            "birthPlace":"Tuban, 12 Februari 1997",
+            "address":"Jln. Cemara 2 No. 80 Meadow Green, Lippo Cikarang",
+            "hobby":"Tidur",
+            "motivation":"Keluarga hiya hiya hiya :)",
+            "image":"mba-yelsa-image"
+        },
+        {
+            "name":"Mulyani",
+            "role":"Android Developer",
+            "birthPlace":"Tangerang, 16 Februari 1998",
+            "address":"Jl. Irigasi Gondrong, Cipondoh, Kota Tangerang",
+            "hobby":"Nonton Running Man, Baca webtoon, Main shopee games",
+            "motivation":"Life day by day xixi",
+            "image":"mba-mul-image"
+        },
+        {
+            "name":"Luthfi Tantowi",
+            "role":"iOS Developer",
+            "birthPlace":"Lebak, 23 Juli 1998",
+            "address":"Perum Kaliwulu, Plered, Kab. Cirebon",
+            "hobby":"Nonton Chuaacks",
+            "motivation":"hehe",
+            "image":"john-brad-image"
+        }
+    ]
+}
