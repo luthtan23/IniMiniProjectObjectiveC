@@ -11,23 +11,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TodoListModel : NSObject
 
-//@property (nonatomic, retain) NSString *name;
-//@property (nonatomic, retain) NSString *role;
-//@property (nonatomic, retain) NSString *birthPlace;
-//@property (nonatomic, retain) NSString *address;
-//@property (nonatomic, retain) NSString *hobby;
-//@property (nonatomic, retain) NSString *motivation;
-//@property (nonatomic, retain) NSString *image;
-//
-//-(NSDictionary*) objec
-//
-//-(id) initWithName: (NSString*) name
-//              role: (NSString*) role
-//        birthPlace: (NSString*) birthPlace
-//           address: (NSString*) address
-//             hobby: (NSString*) hobby
-//        motivation: (NSString*) motivation
-//             image: (NSString*) image;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *desc;
+@property (nonatomic, retain) NSString *date;
+@property (nonatomic, retain) NSString *time;
+@property (nonatomic) NSInteger *priority;
+@property (nonatomic, retain) NSString *image;
+@property (assign) BOOL isEdit;
+@property (nonatomic) NSInteger indexNumber;
+@property (assign) BOOL isComplete;
+
+-(id) initWithName: (NSString*) name
+              desc: (NSString*) desc
+              date: (NSString*) date
+              time: (NSString*) time
+          priotiry: (NSInteger*) priority
+             image: (NSString*) image
+            isEdit: (BOOL) isEdit
+       indexNumber: (NSInteger) indexNumber
+        isComplete: (BOOL) isComplete;
 
 @end
 

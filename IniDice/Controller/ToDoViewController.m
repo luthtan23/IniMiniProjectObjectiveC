@@ -8,14 +8,15 @@
 #import "ToDoViewController.h"
 #import "AddItemViewController.h"
 #import "TodoTableViewCell.h"
+#import "TodoListModel.h"
 
 @interface ToDoViewController () <UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>
-
-@property (nonatomic) NSMutableArray *items;
 
 @end
 
 @implementation ToDoViewController
+
+@synthesize items;
 
 NSString *cellId = @"cellId";
 
@@ -26,7 +27,7 @@ NSString *cellId = @"cellId";
     
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
     
-    self.items = [[NSMutableArray alloc] init].mutableCopy;
+    items = [[NSMutableArray alloc] init].mutableCopy;
     
     self.navigationItem.title = @"To-Do List";
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
@@ -47,11 +48,10 @@ NSString *cellId = @"cellId";
     
 }
 
-- (void) sendItem: (NSDictionary*) item {
-    if (item[@"isEdit"]) {
-        NSNumber *number = [item objectForKey:@"indexEdit"];
-        int intValue = [number intValue];
-        [self.items replaceObjectAtIndex:intValue withObject:item];
+- (void) sendItem: (TodoListModel*) item {
+    if (item.isEdit) {
+        NSInteger number = item.indexNumber;
+        [self.items replaceObjectAtIndex:number withObject:item];
         [self.tableView reloadData];
     } else {
         [self.items addObject:item];
@@ -62,23 +62,22 @@ NSString *cellId = @"cellId";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     TodoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
-    NSDictionary *item = self.items[indexPath.row];
+    NSDictionary *item = items[indexPath.row];
     [cell configureCell:item];
     return cell;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.items.count;
+    return items.count;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSMutableDictionary *item = [self.items[indexPath.row] mutableCopy];
-    item[@"isEdit"] = @(true);
-    self.items[indexPath.row] = item;
-    AddItemViewController *editItem = [[AddItemViewController alloc] initWithNibName:@"AddItemViewController" bundle:nil];
-    editItem.itemEdit = self.items[indexPath.row];
-    editItem.indexEdit = (int) indexPath.row;
+    AddItemViewController *editItem = [[AddItemViewController alloc] init];
+    TodoListModel *item = items[indexPath.row];
+    item.isEdit = YES;
+    item.indexNumber = indexPath.row;
+    editItem.itemEdit = item;
     editItem.delegate = self;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:editItem];
@@ -97,16 +96,17 @@ NSString *cellId = @"cellId";
 
 - (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView leadingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath {
     UIContextualAction *completeAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"Complete" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
-            NSMutableDictionary *item = [self.items[indexPath.row] mutableCopy];
-            BOOL completed = [item[@"completed"] boolValue];
-            item[@"completed"] = @(!completed);
+        TodoListModel *item = self.items[indexPath.row];
+        BOOL completed = item.isComplete;
+        item.isComplete = !completed;
         
-            self.items[indexPath.row] = item;
+        self.items[indexPath.row] = item;
         
-            UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-            cell.accessoryType = ([item[@"completed"] boolValue]) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-            completionHandler(YES);
-        }];
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        cell.accessoryType = (item.isComplete) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        completionHandler(YES);
+    }];
     
     completeAction.backgroundColor = [UIColor blueColor];
     UISwipeActionsConfiguration *configuration = [UISwipeActionsConfiguration configurationWithActions:@[completeAction]];
