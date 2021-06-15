@@ -50,6 +50,7 @@ TodoListModel *item;
     
     array = [[NSArray alloc] init];
     
+    
     [self setValueItemTableCell];
     
     self.imagePicker = [[UIImagePickerController alloc] init];
@@ -60,6 +61,11 @@ TodoListModel *item;
         if (itemEdit.isEdit) {
             self.navigationItem.title = @"Edit Item";
         }
+    } else {
+        item = [[TodoListModel alloc] init];
+        dateText = [[NSString alloc] init];
+        timeText = [[NSString alloc] init];
+        base64Str = [[NSString alloc] init];
     }
     
 }
@@ -106,7 +112,7 @@ TodoListModel *item;
         [self dismissViewControllerAnimated:YES completion:nil];
     }];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
     }];
     
@@ -180,7 +186,7 @@ TodoListModel *item;
         if (indexPath.row == 0) {
             [cell.switchItemTable addTarget:self action:@selector(setStatusSwitchRow0:withEvent:) forControlEvents:UIControlEventTouchUpInside];
             if (itemEdit != nil) {
-                if (itemEdit.date != nil) {
+                if (![itemEdit.date isEqualToString:@""]) {
                     [cell.switchItemTable setOn:YES animated:YES];
                     cell.titleItemTable.text = itemEdit.date;
                 }
@@ -190,7 +196,7 @@ TodoListModel *item;
         if (indexPath.row == 1) {
             [cell.switchItemTable addTarget:self action:@selector(setStatusSwitchRow1:withEvent:) forControlEvents:UIControlEventTouchUpInside];
             if (itemEdit != nil) {
-                if (itemEdit.time != nil) {
+                if (![itemEdit.time isEqualToString:@""]) {
                     [cell.switchItemTable setOn:YES animated:YES];
                     cell.titleItemTable.text = itemEdit.time;
                 }
@@ -349,10 +355,12 @@ TodoListModel *item;
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"dd-MM-yyyy"];
         dateText = [dateFormatter stringFromDate:today];
-        [self setDateField:firstRow];
+        [self setDateField:firstRow canceling:NO];
         [self datePickerAttribute:YES];
     } else {
         NSLog(@"TEST BUTTON ACTIVE");
+        [self setDateField:firstRow canceling:YES];
+        dateText = @"";
     }
 }
 
@@ -363,10 +371,12 @@ TodoListModel *item;
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"hh:mm a"];
         timeText = [dateFormatter stringFromDate:today];
-        [self setDateField:secondRow];
+        [self setDateField:secondRow canceling:NO];
         [self datePickerAttribute:NO];
     } else {
         NSLog(@"TEST BUTTON ACTIVE");
+        [self setDateField:secondRow canceling:YES];
+        timeText = @"";
     }
 }
 
@@ -375,15 +385,37 @@ TodoListModel *item;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"dd-MM-yyyy"];
     dateText = [dateFormatter stringFromDate:datePicker.date];
+    [self setDateFieldOnChanged:firstRow];
 }
 
 - (void) timePickerChanged:(UIDatePicker *)datePicker{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"hh:mm a"];
     timeText = [dateFormatter stringFromDate:datePicker.date];
+    [self setDateFieldOnChanged:secondRow];
 }
 
-- (void) setDateField:(NSInteger) rowAt{
+- (void) setDateField:(NSInteger) rowAt canceling:(BOOL) cancel{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowAt inSection:1];
+    AddItemTableTableViewCell *cell = [simpleTableView cellForRowAtIndexPath:indexPath];
+    if (!cancel) {
+        if (rowAt == firstRow) {
+            cell.titleItemTable.text = dateText;
+        }
+        if (rowAt == secondRow) {
+            cell.titleItemTable.text = timeText;
+        }
+    } else {
+        if (rowAt == firstRow) {
+            cell.titleItemTable.text = @"Date";
+        }
+        if (rowAt == secondRow) {
+            cell.titleItemTable.text = @"Time";
+        }
+    }
+}
+
+- (void) setDateFieldOnChanged:(NSInteger) rowAt{
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowAt inSection:1];
     AddItemTableTableViewCell *cell = [simpleTableView cellForRowAtIndexPath:indexPath];
     if (rowAt == firstRow) {
