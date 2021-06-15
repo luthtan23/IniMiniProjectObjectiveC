@@ -24,11 +24,11 @@
     } else {
         self.accessoryType = UITableViewCellAccessoryNone;
     }
-    if (item.date != nil) {
+    if (![item.date isEqualToString:@""]) {
         _dateTodo.text = item.date;
         _dateTodo.textColor = [UIColor blackColor];
     }
-    if (item.time != nil) {
+    if (![item.time isEqualToString:@""]) {
         _timeTodo.text = item.time;
         _timeTodo.textColor = [UIColor blackColor];
     }
