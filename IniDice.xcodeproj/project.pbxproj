@@ -16,12 +16,13 @@
 		851B25BB265B8049006582AD /* IniDiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 851B25BA265B8049006582AD /* IniDiceTests.m */; };
 		851B25C6265B8049006582AD /* IniDiceUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 851B25C5265B8049006582AD /* IniDiceUITests.m */; };
 		855D20132660995A00DFF4B2 /* CatatanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 855D20122660995A00DFF4B2 /* CatatanViewController.m */; };
+		85B51FBD26773F2A0024C531 /* AddItemTableTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B51FBB26773F2A0024C531 /* AddItemTableTableViewCell.m */; };
+		85B51FBE26773F2A0024C531 /* AddItemTableTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85B51FBC26773F2A0024C531 /* AddItemTableTableViewCell.xib */; };
 		85C1EF2226687E920092CB28 /* MemberDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C1EF2026687E920092CB28 /* MemberDetailViewController.m */; };
 		85C1EF2326687E920092CB28 /* MemberDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85C1EF2126687E920092CB28 /* MemberDetailViewController.xib */; };
 		85D20727265F768F0045F8A2 /* ResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D20726265F768F0045F8A2 /* ResultViewController.m */; };
 		85EB6B61266F041E00B1C4C0 /* ToDoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85EB6B60266F041E00B1C4C0 /* ToDoViewController.m */; };
 		85EB6B6B266F1FED00B1C4C0 /* AddItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85EB6B69266F1FED00B1C4C0 /* AddItemViewController.m */; };
-		85EB6B6C266F1FED00B1C4C0 /* AddItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85EB6B6A266F1FED00B1C4C0 /* AddItemViewController.xib */; };
 		85EB6B72266F209500B1C4C0 /* TodoListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 85EB6B71266F209500B1C4C0 /* TodoListModel.m */; };
 		85EB6B7C266F3AA400B1C4C0 /* TodoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 85EB6B7A266F3AA400B1C4C0 /* TodoTableViewCell.m */; };
 		85EB6B7D266F3AA400B1C4C0 /* TodoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85EB6B7B266F3AA400B1C4C0 /* TodoTableViewCell.xib */; };
@@ -31,6 +32,8 @@
 		85F5F6BA26685ADB00C03AFE /* MemberTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85F5F6B826685ADB00C03AFE /* MemberTableViewCell.xib */; };
 		85F5F6C626685D1700C03AFE /* MemberModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 85F5F6C526685D1700C03AFE /* MemberModel.m */; };
 		85F5F6DE266860AB00C03AFE /* member.json in Resources */ = {isa = PBXBuildFile; fileRef = 85F5F6DD266860AB00C03AFE /* member.json */; };
+		85FEA08826771F4F0001D249 /* ItemTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FEA08726771F4F0001D249 /* ItemTableCell.m */; };
+		85FEA094267720610001D249 /* PriorityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85FEA093267720610001D249 /* PriorityViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +73,9 @@
 		851B25C7265B8049006582AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		855D20112660995A00DFF4B2 /* CatatanViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CatatanViewController.h; sourceTree = "<group>"; };
 		855D20122660995A00DFF4B2 /* CatatanViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CatatanViewController.m; sourceTree = "<group>"; };
+		85B51FBA26773F2A0024C531 /* AddItemTableTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddItemTableTableViewCell.h; sourceTree = "<group>"; };
+		85B51FBB26773F2A0024C531 /* AddItemTableTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddItemTableTableViewCell.m; sourceTree = "<group>"; };
+		85B51FBC26773F2A0024C531 /* AddItemTableTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddItemTableTableViewCell.xib; sourceTree = "<group>"; };
 		85C1EF1F26687E920092CB28 /* MemberDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemberDetailViewController.h; sourceTree = "<group>"; };
 		85C1EF2026687E920092CB28 /* MemberDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MemberDetailViewController.m; sourceTree = "<group>"; };
 		85C1EF2126687E920092CB28 /* MemberDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MemberDetailViewController.xib; sourceTree = "<group>"; };
@@ -79,7 +85,6 @@
 		85EB6B60266F041E00B1C4C0 /* ToDoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToDoViewController.m; sourceTree = "<group>"; };
 		85EB6B68266F1FED00B1C4C0 /* AddItemViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddItemViewController.h; sourceTree = "<group>"; };
 		85EB6B69266F1FED00B1C4C0 /* AddItemViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddItemViewController.m; sourceTree = "<group>"; };
-		85EB6B6A266F1FED00B1C4C0 /* AddItemViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddItemViewController.xib; sourceTree = "<group>"; };
 		85EB6B70266F209500B1C4C0 /* TodoListModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodoListModel.h; sourceTree = "<group>"; };
 		85EB6B71266F209500B1C4C0 /* TodoListModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodoListModel.m; sourceTree = "<group>"; };
 		85EB6B79266F3AA400B1C4C0 /* TodoTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodoTableViewCell.h; sourceTree = "<group>"; };
@@ -95,6 +100,10 @@
 		85F5F6C426685D1700C03AFE /* MemberModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemberModel.h; sourceTree = "<group>"; };
 		85F5F6C526685D1700C03AFE /* MemberModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MemberModel.m; sourceTree = "<group>"; };
 		85F5F6DD266860AB00C03AFE /* member.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = member.json; sourceTree = "<group>"; };
+		85FEA08626771F4F0001D249 /* ItemTableCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ItemTableCell.h; sourceTree = "<group>"; };
+		85FEA08726771F4F0001D249 /* ItemTableCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ItemTableCell.m; sourceTree = "<group>"; };
+		85FEA092267720610001D249 /* PriorityViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PriorityViewController.h; sourceTree = "<group>"; };
+		85FEA093267720610001D249 /* PriorityViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PriorityViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,10 +210,14 @@
 				85EB6B60266F041E00B1C4C0 /* ToDoViewController.m */,
 				85EB6B68266F1FED00B1C4C0 /* AddItemViewController.h */,
 				85EB6B69266F1FED00B1C4C0 /* AddItemViewController.m */,
-				85EB6B6A266F1FED00B1C4C0 /* AddItemViewController.xib */,
 				85EB6B79266F3AA400B1C4C0 /* TodoTableViewCell.h */,
 				85EB6B7A266F3AA400B1C4C0 /* TodoTableViewCell.m */,
 				85EB6B7B266F3AA400B1C4C0 /* TodoTableViewCell.xib */,
+				85FEA092267720610001D249 /* PriorityViewController.h */,
+				85FEA093267720610001D249 /* PriorityViewController.m */,
+				85B51FBA26773F2A0024C531 /* AddItemTableTableViewCell.h */,
+				85B51FBB26773F2A0024C531 /* AddItemTableTableViewCell.m */,
+				85B51FBC26773F2A0024C531 /* AddItemTableTableViewCell.xib */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -216,6 +229,8 @@
 				85F5F6C526685D1700C03AFE /* MemberModel.m */,
 				85EB6B70266F209500B1C4C0 /* TodoListModel.h */,
 				85EB6B71266F209500B1C4C0 /* TodoListModel.m */,
+				85FEA08626771F4F0001D249 /* ItemTableCell.h */,
+				85FEA08726771F4F0001D249 /* ItemTableCell.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -323,8 +338,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				851B25AE265B8049006582AD /* LaunchScreen.storyboard in Resources */,
+				85B51FBE26773F2A0024C531 /* AddItemTableTableViewCell.xib in Resources */,
 				85EB6B7D266F3AA400B1C4C0 /* TodoTableViewCell.xib in Resources */,
-				85EB6B6C266F1FED00B1C4C0 /* AddItemViewController.xib in Resources */,
 				85C1EF2326687E920092CB28 /* MemberDetailViewController.xib in Resources */,
 				85F5F6BA26685ADB00C03AFE /* MemberTableViewCell.xib in Resources */,
 				851B25AB265B8049006582AD /* Assets.xcassets in Resources */,
@@ -354,14 +369,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				85EB6B6B266F1FED00B1C4C0 /* AddItemViewController.m in Sources */,
+				85B51FBD26773F2A0024C531 /* AddItemTableTableViewCell.m in Sources */,
 				85EB6B72266F209500B1C4C0 /* TodoListModel.m in Sources */,
 				851B25A6265B8048006582AD /* ViewController.m in Sources */,
 				85F5F6B926685ADB00C03AFE /* MemberTableViewCell.m in Sources */,
 				85F5F6192660C40900C03AFE /* SimpleTabBarViewController.m in Sources */,
+				85FEA08826771F4F0001D249 /* ItemTableCell.m in Sources */,
 				85F5F6C626685D1700C03AFE /* MemberModel.m in Sources */,
 				851B25A0265B8048006582AD /* AppDelegate.m in Sources */,
 				85EB6B7C266F3AA400B1C4C0 /* TodoTableViewCell.m in Sources */,
 				85F5F62F2660DE6200C03AFE /* SimpleTableViewCell.m in Sources */,
+				85FEA094267720610001D249 /* PriorityViewController.m in Sources */,
 				851B25B1265B8049006582AD /* main.m in Sources */,
 				85D20727265F768F0045F8A2 /* ResultViewController.m in Sources */,
 				85EB6B61266F041E00B1C4C0 /* ToDoViewController.m in Sources */,

@@ -6,23 +6,32 @@
 //
 
 #import "TodoTableViewCell.h"
+#import "TodoListModel.h"
 
 @implementation TodoTableViewCell
 
-- (void)configureCell:(NSDictionary*) item{
-    _activityTodo.text = item[@"name"];
-    _timeTodo.text = item[@"time"];
-    if (![item[@"image"] isEqual:@""]) {
-        _imageTodo.image = [self decodeBase64ToImage:item[@"image"]];
+- (void)configureCell:(TodoListModel*) item{
+    _activityTodo.text = item.name;
+    _descTodo.text = item.desc;
+    if (![item.image isEqual:@""]) {
+        _imageTodo.image = [self decodeBase64ToImage:item.image];
         NSLog(@"LOG GAMBAR");
     } else {
         _imageTodo.image = nil;
     }
-    if ([item[@"completed"] boolValue]) {
-            self.accessoryType = UITableViewCellAccessoryCheckmark;
-        } else {
-            self.accessoryType = UITableViewCellAccessoryNone;
-        }
+    if (item.isComplete) {
+        self.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else {
+        self.accessoryType = UITableViewCellAccessoryNone;
+    }
+    if (item.date != nil) {
+        _dateTodo.text = item.date;
+        _dateTodo.textColor = [UIColor blackColor];
+    }
+    if (item.time != nil) {
+        _timeTodo.text = item.time;
+        _timeTodo.textColor = [UIColor blackColor];
+    }
 }
 
 - (void)awakeFromNib {

@@ -6,23 +6,28 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TodoListModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol sendData <NSObject>
 
--(void) sendItem:(NSDictionary *) item;
+-(void) sendItem:(TodoListModel *) item;
 
 @end
 
 @interface AddItemViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UITextField *activityTodo;
-@property (weak, nonatomic) IBOutlet UIDatePicker *timeTodo;
-@property (weak, nonatomic) IBOutlet UIButton *addImageTodo;
-@property (strong, nonatomic)  UIImagePickerController *imagePicker;
-@property (assign) NSDictionary *itemEdit;
-@property (nonatomic) int indexEdit;
+@property(nonatomic, retain) UITableView *simpleTableView;
+@property(nonatomic,retain) UIDatePicker *datePicker;
+@property(nonatomic,retain) UIView *pickerView;
+@property(nonatomic,retain) UIView *timeBackgroundView;
+@property(nonatomic,retain) UIButton *pickerButton;
+@property (strong, nonatomic) UIImagePickerController *imagePicker;
+
+@property (assign) TodoListModel *itemEdit;
+
+@property (strong, nonatomic) UIButton *imageButton;
 
 @property(nonatomic, assign)id delegate;
 
