@@ -6,6 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TodoListModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *dateTodo;
 @property (weak, nonatomic) IBOutlet UILabel *descTodo;
 
-- (void)configureCell:(NSDictionary *) item;
+- (void)configureCell:(TodoListModel *) item;
 
 @end
 

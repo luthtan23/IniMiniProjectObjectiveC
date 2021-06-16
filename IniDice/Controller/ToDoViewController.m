@@ -27,7 +27,7 @@ NSString *cellId = @"cellId";
     
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
     
-    items = [[NSMutableArray alloc] init].mutableCopy;
+    items = [[NSMutableArray alloc] init];
     
     self.navigationItem.title = @"To-Do List";
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
@@ -57,12 +57,11 @@ NSString *cellId = @"cellId";
         [self.items addObject:item];
         [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.items.count - 1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
-    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     TodoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
-    NSDictionary *item = items[indexPath.row];
+    TodoListModel *item = items[indexPath.row];
     [cell configureCell:item];
     return cell;
 }

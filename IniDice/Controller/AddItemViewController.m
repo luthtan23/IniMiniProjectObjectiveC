@@ -43,7 +43,6 @@ TodoListModel *item;
     simpleTableView.showsHorizontalScrollIndicator = NO;
     simpleTableView.showsVerticalScrollIndicator = NO;
     [simpleTableView registerNib:[UINib nibWithNibName:@"AddItemTableTableViewCell" bundle:nil] forCellReuseIdentifier:cellIdStatic];
-    
     expandableArray = @[@"One", @"Two"].mutableCopy;
     
     [self setConstraint];
@@ -70,14 +69,19 @@ TodoListModel *item;
     
 }
 
+- (void)hideKeyboard
+{
+    [self.view endEditing:YES];
+}
+
 - (void) addItem:(UIBarButtonItem *) sender {
     [self setTextFieldValue:firstRow];
     [self setTextFieldValue:secondRow];
     if (![titleText  isEqual: @""]) {
         if (itemEdit.isEdit) {
-            item = [[TodoListModel alloc] initWithName:titleText desc:descText date:dateText time:timeText priotiry:&priority image:base64Str isEdit:YES indexNumber:itemEdit.indexNumber isComplete:itemEdit.isComplete];
+            item = [[TodoListModel alloc] initWithName:titleText desc:descText date:dateText time:timeText priotiry:priority image:base64Str isEdit:YES indexNumber:itemEdit.indexNumber isComplete:itemEdit.isComplete];
         } else {
-            item = [[TodoListModel alloc] initWithName:titleText desc:descText date:dateText time:timeText priotiry:&priority image:base64Str isEdit:NO indexNumber:0 isComplete:NO];
+            item = [[TodoListModel alloc] initWithName:titleText desc:descText date:dateText time:timeText priotiry:priority image:base64Str isEdit:NO indexNumber:0 isComplete:NO];
         }
         [delegate sendItem:item];
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -143,6 +147,7 @@ TodoListModel *item;
     [simpleTableView.leadingAnchor constraintEqualToAnchor:template.leadingAnchor constant:20].active = YES;
     [simpleTableView.trailingAnchor constraintEqualToAnchor:template.trailingAnchor constant:-20].active = YES;
     
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -171,6 +176,7 @@ TodoListModel *item;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     AddItemTableTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdStatic forIndexPath:indexPath];
     if (indexPath.section == 0) {
+        cell.activityTodo.delegate = self;
         [cell configureCell];
         if (indexPath.row == 0) cell.activityTodo.placeholder = @"Title";
         if (indexPath.row == 1) cell.activityTodo.placeholder = @"Description";
@@ -204,7 +210,8 @@ TodoListModel *item;
             } else [cell.switchItemTable setOn:NO animated:YES];
         }
     } else if (indexPath.section == 2) {
-        [cell configurePriority];
+        if (itemEdit != nil) [cell configurePriority:item.priority];
+        else [cell configurePriority:priority];
     } else if (indexPath.section == 3) {
         [cell configureImageActivity];
         [self setButtonImageSelected:cell];
@@ -219,22 +226,27 @@ TodoListModel *item;
                 imageButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
             }
         }
-        
-        
     }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [self hideKeyboard];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 1) {
         if (indexPath.row == 0) {
             //expand here
+            if (![dateText isEqual:@""]) [self datePickerAttribute:YES];
+        }
+        if (indexPath.row == 1) {
+            if (![timeText isEqual:@""]) [self datePickerAttribute:NO];
         }
     }
     if (indexPath.section == 2) {
-        PriorityViewController *priority = [[PriorityViewController alloc] init];
-        [self.navigationController pushViewController:priority animated:YES];
+        PriorityViewController *priorityViewController = [[PriorityViewController alloc] init];
+        priorityViewController.delegate = self;
+        priorityViewController.result = priority;
+        [self.navigationController pushViewController:priorityViewController animated:YES];
     }
     if (indexPath.section == 3) {
         [imageButton addTarget:self action:@selector(toDoAddImageBtnAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -265,6 +277,7 @@ TodoListModel *item;
 }
 
 - (void) datePickerAttribute:(BOOL) isDateSelected {
+    
     pickerView.backgroundColor = [UIColor blackColor];
     pickerView.alpha = 0.5;
     [self.view addSubview:pickerView];
@@ -292,6 +305,12 @@ TodoListModel *item;
         
         [datePicker setDatePickerMode:UIDatePickerModeDate];
         [datePicker addTarget:self action:@selector(datePickerChanged:) forControlEvents:UIControlEventValueChanged];
+        if (![dateText isEqual:@""]) {
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"dd-MM-yyyy"];
+            NSDate *dateBefore =[dateFormatter dateFromString:dateText];
+            [datePicker setDate:dateBefore];
+        }
         [self.view addSubview:datePicker];
         
         datePicker.translatesAutoresizingMaskIntoConstraints = NO;
@@ -314,6 +333,12 @@ TodoListModel *item;
         
         [datePicker setDatePickerMode:UIDatePickerModeTime];
         [datePicker addTarget:self action:@selector(timePickerChanged:) forControlEvents:UIControlEventValueChanged];
+        if (![timeText isEqual:@""]) {
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"hh:mm a"];
+            NSDate *dateBefore =[dateFormatter dateFromString:timeText];
+            [datePicker setDate:dateBefore];
+        }
         [timeBackgroundView addSubview:datePicker];
         
         datePicker.translatesAutoresizingMaskIntoConstraints = NO;
@@ -349,6 +374,7 @@ TodoListModel *item;
 }
 
 - (void) setStatusSwitchRow0:(UIButton*) sender withEvent:(UIEvent *) event{
+    [self hideKeyboard];
     sender.selected = !sender.selected;
     if (sender.selected) {
         NSDate *today = [NSDate date];
@@ -365,6 +391,7 @@ TodoListModel *item;
 }
 
 - (void) setStatusSwitchRow1:(UIButton*) sender withEvent:(UIEvent *) event{
+    [self hideKeyboard];
     sender.selected = !sender.selected;
     if (sender.selected) {
         NSDate *today = [NSDate date];
@@ -433,9 +460,11 @@ TodoListModel *item;
     [timeBackgroundView removeFromSuperview];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [self.view endEditing:YES];
-    return false;
+- (void) priorityData:(NSInteger) priorityInt priorityText:(NSString*) priorityText{
+    priority = priorityInt;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:2];
+    AddItemTableTableViewCell *cell = [simpleTableView cellForRowAtIndexPath:indexPath];
+    cell.labelPriority.text = priorityText;
 }
 
 - (void)toDoAddImageBtnAction:(id)sender {
@@ -531,6 +560,16 @@ TodoListModel *item;
 - (UIImage *)decodeBase64ToImage:(NSString *)strEncodeData {
   NSData *data = [[NSData alloc]initWithBase64EncodedString:strEncodeData options:NSDataBase64DecodingIgnoreUnknownCharacters];
   return [UIImage imageWithData:data];
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    AddItemTableTableViewCell *cell = [simpleTableView cellForRowAtIndexPath:indexPath];
+    if (textField == cell.activityTodo) {
+        if (textField.text.length < 5 || string.length == 0) return YES;
+        else return NO;
+    }
+    else return NO;
 }
 
     

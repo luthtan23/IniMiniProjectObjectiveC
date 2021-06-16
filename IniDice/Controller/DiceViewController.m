@@ -1,19 +1,18 @@
 //
-//  ViewController.m
+//  DiceViewController.m
 //  IniDice
 //
-//  Created by iei19100004 on 24/05/21.
+//  Created by iei19100004 on 16/06/21.
 //
 
-#import "ViewController.h"
+#import "DiceViewController.h"
 #include <stdlib.h>
-#import "ResultViewController.h"
 
-@interface ViewController ()
+@interface DiceViewController ()
 
 @end
 
-@implementation ViewController
+@implementation DiceViewController
 
 NSTimer *_labelTimer;
 UIButton *buttonDice;
@@ -38,7 +37,7 @@ int result1, result2, resTotal = 0;
         [self setConstraintsIpad];
     } else {
         [self setConstraintsIphone];
-    }   
+    }
 
 }
 
@@ -217,12 +216,6 @@ int result1, result2, resTotal = 0;
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [_labelTimer invalidate];
         resTotal = result1 + result2;
-        
-        ResultViewController *resultController = [[ResultViewController alloc] init];
-        resultController.result = resTotal;
-
-        [self.navigationController pushViewController:resultController animated:YES];
-        
         self.textTotal.text = [NSString stringWithFormat:@"%d", resTotal];
         [self setStatusbuttonDice:NO];
         NSLog(@"Invalidate succes");
