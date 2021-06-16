@@ -13,7 +13,6 @@
 
 - (void) configureCell {
     activityTodo = [[UITextField alloc]initWithFrame:CGRectMake(16, 0, self.contentView.frame.size.width, self.contentView.frame.size.height)];
-//    activityTodo = (UITextField*) [self.contentView viewWithTag:self.]
     activityTodo.textColor = [UIColor blackColor];
     [self.contentView addSubview:activityTodo];
     [self setHidenAttribute:false];
@@ -29,8 +28,12 @@
     
 }
 
-- (void) configurePriority {
+- (void) configurePriority:(NSInteger) result {
     UILabel *priority = [[UILabel alloc] initWithFrame:CGRectMake(16, 0, 100, self.contentView.frame.size.height)];
+    if (result == 0) _labelPriority.text = @"None";
+    else if (result == 1) _labelPriority.text = @"Low";
+    else if (result == 2) _labelPriority.text = @"Medium";
+    else if (result == 3) _labelPriority.text = @"High";
     priority.text = @"Priority";
     [self.contentView addSubview:priority];
     [self setHidenAttribute:true];
@@ -38,7 +41,6 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

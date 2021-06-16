@@ -7,11 +7,9 @@
 
 #import "AppDelegate.h"
 #import "SceneDelegate.h"
-#import "ViewController.h"
 
 @interface AppDelegate ()
 
-@property (nonatomic) ViewController *viewController;
 @property (nonatomic, strong) UINavigationController *navigationController;
 
 @end

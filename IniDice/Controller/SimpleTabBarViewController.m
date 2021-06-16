@@ -6,8 +6,8 @@
 //
 
 #import "SimpleTabBarViewController.h"
-#import "ViewController.h"
-#import "CatatanViewController.h"
+#import "DiceViewController.h"
+#import "MemberTableViewController.h"
 #import "ToDoViewController.h"
 
 @interface SimpleTabBarViewController ()
@@ -21,8 +21,8 @@
     // Do any additional setup after loading the view.
     
     self.view.backgroundColor = [UIColor whiteColor];
-    ViewController *firstController = [[ViewController alloc] init];
-    CatatanViewController *secondController = [[CatatanViewController alloc] init];
+    DiceViewController *firstController = [[DiceViewController alloc] init];
+    MemberTableViewController *secondController = [[MemberTableViewController alloc] init];
     ToDoViewController *thirdController = [[ToDoViewController alloc] init];
     UINavigationController *firstNav = [[UINavigationController alloc] initWithRootViewController:firstController];
     UINavigationController *secondNav = [[UINavigationController alloc] initWithRootViewController:secondController];
@@ -35,15 +35,5 @@
     self.viewControllers = [NSArray arrayWithObjects:thirddNav, secondNav, firstNav, nil];
 
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

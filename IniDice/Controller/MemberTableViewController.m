@@ -1,21 +1,20 @@
 //
-//  CatatanViewController.m
+//  MemberTableViewController.m
 //  IniDice
 //
-//  Created by iei19100004 on 28/05/21.
+//  Created by iei19100004 on 16/06/21.
 //
 
-#import "CatatanViewController.h"
-#import "ResultViewController.h"
+#import "MemberTableViewController.h"
 #import "MemberTableViewCell.h"
 #import "MemberModel.h"
 #import "MemberDetailViewController.h"
 
-@interface CatatanViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface MemberTableViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
-@implementation CatatanViewController
+@implementation MemberTableViewController
 
 NSString *identifier = @"MemberCell";
 NSArray *members;
@@ -92,6 +91,4 @@ NSArray *members;
     memberDetail.memberModel = members[indexPath.row];
     [self.navigationController pushViewController:memberDetail animated:YES];
 }
-
-
 @end

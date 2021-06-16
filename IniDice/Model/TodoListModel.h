@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain) NSString *desc;
 @property (nonatomic, retain) NSString *date;
 @property (nonatomic, retain) NSString *time;
-@property (nonatomic) NSInteger *priority;
+@property (nonatomic) NSInteger priority;
 @property (nonatomic, retain) NSString *image;
 @property (assign) BOOL isEdit;
 @property (nonatomic) NSInteger indexNumber;
@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
               desc: (NSString*) desc
               date: (NSString*) date
               time: (NSString*) time
-          priotiry: (NSInteger*) priority
+          priotiry: (NSInteger) priority
              image: (NSString*) image
             isEdit: (BOOL) isEdit
        indexNumber: (NSInteger) indexNumber

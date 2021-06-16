@@ -1,13 +1,15 @@
 //
-//  ViewController.h
+//  DiceViewController.h
 //  IniDice
 //
-//  Created by iei19100004 on 24/05/21.
+//  Created by iei19100004 on 16/06/21.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+NS_ASSUME_NONNULL_BEGIN
+
+@interface DiceViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UIImageView *dice1;
 @property (strong, nonatomic) IBOutlet UIImageView *dice2;
@@ -19,3 +21,4 @@
 
 @end
 
+NS_ASSUME_NONNULL_END

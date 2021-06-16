@@ -31,16 +31,16 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="None" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H1h-bX-TAP">
-                        <rect key="frame" x="326" y="16" width="41" height="21"/>
+                        <rect key="frame" x="350" y="16" width="41" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" systemColor="systemGray4Color"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="u8d-bE-aWg">
-                        <rect key="frame" x="369" y="9" width="36" height="36.5"/>
+                        <rect key="frame" x="393" y="9" width="12" height="36.5"/>
                         <color key="tintColor" systemColor="systemGray4Color"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="36" id="FAZ-9M-ihl"/>
+                            <constraint firstAttribute="width" constant="12" id="FAZ-9M-ihl"/>
                         </constraints>
                     </imageView>
                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X0U-OK-5EK">
