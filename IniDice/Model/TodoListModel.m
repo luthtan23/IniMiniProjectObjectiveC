@@ -9,9 +9,10 @@
 
 @implementation TodoListModel
 
-@synthesize name,desc,date,time,priority,image,isEdit,indexNumber, isComplete;
+@synthesize idTodoList, name,desc,date,time,priority,image,isEdit,indexNumber, isComplete;
 
-- (id) initWithName:(NSString *)name desc:(NSString *)desc date:(NSString *)date time:(NSString *)time priotiry:(NSInteger)priority image:(NSString *)image isEdit:(BOOL)isEdit indexNumber:(NSInteger)indexNumber isComplete:(BOOL)isComplete{
+- (id) initWithIdTodoList:(NSInteger)idTodoList name:(NSString *)name desc:(NSString *)desc date:(NSString *)date time:(NSString *)time priotiry:(NSInteger)priority image:(NSString *)image isEdit:(BOOL)isEdit indexNumber:(NSInteger)indexNumber isComplete:(BOOL)isComplete{
+    self.idTodoList = idTodoList;
     self.name = name;
     self.desc = desc;
     self.date = date;

@@ -10,6 +10,8 @@
 #import "ItemTableCell.h"
 #import "PriorityViewController.h"
 #import "TodoListModel.h"
+#import <Photos/Photos.h>
+#import "RotateImage.h"
 
 @interface AddItemViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
@@ -22,7 +24,7 @@
 NSString *cellIdStatic = @"cellId", *titleText, *descText, *dateText, *timeText, *base64Str = @"";
 NSArray* array;
 NSInteger firstRow = 0, secondRow = 1, priority = 0;
-BOOL collapse = NO;
+BOOL collapse = NO, switchDateStatus = NO, switchTimeStatus = NO;
 NSMutableArray* expandableArray;
 TodoListModel *item;
 
@@ -59,12 +61,20 @@ TodoListModel *item;
     if (itemEdit != nil) {
         if (itemEdit.isEdit) {
             self.navigationItem.title = @"Edit Item";
+            if (!(itemEdit.date.length == 0) || ![item.date isEqualToString:@""]) switchDateStatus = YES;
+            if (!(itemEdit.time.length == 0) || ![itemEdit.time isEqualToString:@""]) switchTimeStatus = YES;
+            dateText = itemEdit.date;
+            timeText = itemEdit.time;
+            base64Str = itemEdit.image;
         }
     } else {
         item = [[TodoListModel alloc] init];
         dateText = [[NSString alloc] init];
         timeText = [[NSString alloc] init];
         base64Str = [[NSString alloc] init];
+        switchDateStatus = NO;
+        switchTimeStatus = NO;
+        priority = 0;
     }
     
 }
@@ -79,9 +89,9 @@ TodoListModel *item;
     [self setTextFieldValue:secondRow];
     if (![titleText  isEqual: @""]) {
         if (itemEdit.isEdit) {
-            item = [[TodoListModel alloc] initWithName:titleText desc:descText date:dateText time:timeText priotiry:priority image:base64Str isEdit:YES indexNumber:itemEdit.indexNumber isComplete:itemEdit.isComplete];
+            item = [[TodoListModel alloc] initWithIdTodoList:itemEdit.idTodoList name:titleText desc:descText date:dateText time:timeText priotiry:priority image:base64Str isEdit:YES indexNumber:itemEdit.indexNumber isComplete:itemEdit.isComplete];
         } else {
-            item = [[TodoListModel alloc] initWithName:titleText desc:descText date:dateText time:timeText priotiry:priority image:base64Str isEdit:NO indexNumber:0 isComplete:NO];
+            item = [[TodoListModel alloc] initWithIdTodoList:0 name:titleText desc:descText date:dateText time:timeText priotiry:priority image:base64Str isEdit:NO indexNumber:0 isComplete:NO];
         }
         [delegate sendItem:item];
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -375,8 +385,8 @@ TodoListModel *item;
 
 - (void) setStatusSwitchRow0:(UIButton*) sender withEvent:(UIEvent *) event{
     [self hideKeyboard];
-    sender.selected = !sender.selected;
-    if (sender.selected) {
+    switchDateStatus = !switchDateStatus;
+    if (switchDateStatus) {
         NSDate *today = [NSDate date];
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"dd-MM-yyyy"];
@@ -392,8 +402,8 @@ TodoListModel *item;
 
 - (void) setStatusSwitchRow1:(UIButton*) sender withEvent:(UIEvent *) event{
     [self hideKeyboard];
-    sender.selected = !sender.selected;
-    if (sender.selected) {
+    switchTimeStatus = !switchTimeStatus;
+    if (switchTimeStatus) {
         NSDate *today = [NSDate date];
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"hh:mm a"];
@@ -490,12 +500,9 @@ TodoListModel *item;
                              handler:^(UIAlertAction * action)
                              {
                                  self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-            self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
-            self.imagePicker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
-            self.imagePicker.showsCameraControls = NO;
-            [self presentViewController:self.imagePicker animated:YES completion: ^{
-                [self.imagePicker takePicture];
-            }];
+                                self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+                                self.imagePicker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+                                [self presentViewController:self.imagePicker animated:YES completion:nil];
                                  [alert dismissViewControllerAnimated:YES completion:nil];
                                  
                              }];
@@ -520,32 +527,22 @@ TodoListModel *item;
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<UIImagePickerControllerInfoKey,id> *)info{
-    UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
-    NSData *imagedata =  UIImagePNGRepresentation(image);
-    NSString *base64 = [imagedata base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-    base64Str = base64;
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     [imageButton setImage:image forState:UIControlStateNormal];
     imageButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     imageButton.imageView.layer.transform = CATransform3DMakeScale(1, 1, 1);
-    if (self.imagePicker.sourceType == UIImagePickerControllerSourceTypeCamera)
-        UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+    if (self.imagePicker.sourceType == UIImagePickerControllerSourceTypeCamera) {
+        RotateImage *rotate = [[RotateImage alloc] init];
+        image = [rotate scaleAndRotateImage:image];
+    }
+    NSData *imagedata =  UIImagePNGRepresentation(image);
+    NSString *base64 = [imagedata base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    base64Str = base64;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)imagePickerControllerDidCancel: (UIImagePickerController *)picker {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
-    if (error)
-        {
-            UILabel *error = [[UILabel alloc] initWithFrame:CGRectMake(70, 300, self.view.frame.size.width -90, 50)];
-            error.text = @"ERROR IMAGE";
-            [self.view addSubview:error];
-            
-        }
-    /*else
-        [self callAlertViewWithTitle:@"Success" andMessage:@"Image saved to Photo Album"];*/
 }
 
 - (void) setButtonImageSelected:(AddItemTableTableViewCell* ) cell {
@@ -560,16 +557,6 @@ TodoListModel *item;
 - (UIImage *)decodeBase64ToImage:(NSString *)strEncodeData {
   NSData *data = [[NSData alloc]initWithBase64EncodedString:strEncodeData options:NSDataBase64DecodingIgnoreUnknownCharacters];
   return [UIImage imageWithData:data];
-}
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    AddItemTableTableViewCell *cell = [simpleTableView cellForRowAtIndexPath:indexPath];
-    if (textField == cell.activityTodo) {
-        if (textField.text.length < 5 || string.length == 0) return YES;
-        else return NO;
-    }
-    else return NO;
 }
 
     

@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TodoListModel : NSObject
 
+@property (nonatomic) NSInteger idTodoList;
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *desc;
 @property (nonatomic, retain) NSString *date;
@@ -21,15 +22,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSInteger indexNumber;
 @property (assign) BOOL isComplete;
 
--(id) initWithName: (NSString*) name
-              desc: (NSString*) desc
-              date: (NSString*) date
-              time: (NSString*) time
-          priotiry: (NSInteger) priority
-             image: (NSString*) image
-            isEdit: (BOOL) isEdit
-       indexNumber: (NSInteger) indexNumber
-        isComplete: (BOOL) isComplete;
+-(id) initWithIdTodoList: (NSInteger) idTodoList
+                    name: (NSString*) name
+                    desc: (NSString*) desc
+                    date: (NSString*) date
+                    time: (NSString*) time
+                priotiry: (NSInteger) priority
+                   image: (NSString*) image
+                  isEdit: (BOOL) isEdit
+             indexNumber: (NSInteger) indexNumber
+              isComplete: (BOOL) isComplete;
 
 @end
 
