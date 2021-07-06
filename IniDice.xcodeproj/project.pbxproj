@@ -203,14 +203,27 @@
 		85D20724265F76790045F8A2 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				85D90C332693E0A600804569 /* DiceGenerator */,
+				85D90C322693E07600804569 /* MemberList */,
+				85D90C312693E01C00804569 /* To-doList */,
 				85F5F6172660C40900C03AFE /* SimpleTabBarViewController.h */,
 				85F5F6182660C40900C03AFE /* SimpleTabBarViewController.m */,
-				85F5F6B626685ADB00C03AFE /* MemberTableViewCell.h */,
-				85F5F6B726685ADB00C03AFE /* MemberTableViewCell.m */,
-				85F5F6B826685ADB00C03AFE /* MemberTableViewCell.xib */,
-				85C1EF1F26687E920092CB28 /* MemberDetailViewController.h */,
-				85C1EF2026687E920092CB28 /* MemberDetailViewController.m */,
-				85C1EF2126687E920092CB28 /* MemberDetailViewController.xib */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		85D90C2A268D935400804569 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				85D90C2B268D936E00804569 /* RotateImage.h */,
+				85D90C2C268D936E00804569 /* RotateImage.m */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		85D90C312693E01C00804569 /* To-doList */ = {
+			isa = PBXGroup;
+			children = (
 				85EB6B5F266F041E00B1C4C0 /* ToDoViewController.h */,
 				85EB6B60266F041E00B1C4C0 /* ToDoViewController.m */,
 				85EB6B68266F1FED00B1C4C0 /* AddItemViewController.h */,
@@ -223,21 +236,32 @@
 				85B51FBA26773F2A0024C531 /* AddItemTableTableViewCell.h */,
 				85B51FBB26773F2A0024C531 /* AddItemTableTableViewCell.m */,
 				85B51FBC26773F2A0024C531 /* AddItemTableTableViewCell.xib */,
-				85B51FD4267985AD0024C531 /* DiceViewController.h */,
-				85B51FD5267985AD0024C531 /* DiceViewController.m */,
+			);
+			path = "To-doList";
+			sourceTree = "<group>";
+		};
+		85D90C322693E07600804569 /* MemberList */ = {
+			isa = PBXGroup;
+			children = (
+				85F5F6B626685ADB00C03AFE /* MemberTableViewCell.h */,
+				85F5F6B726685ADB00C03AFE /* MemberTableViewCell.m */,
+				85F5F6B826685ADB00C03AFE /* MemberTableViewCell.xib */,
+				85C1EF1F26687E920092CB28 /* MemberDetailViewController.h */,
+				85C1EF2026687E920092CB28 /* MemberDetailViewController.m */,
+				85C1EF2126687E920092CB28 /* MemberDetailViewController.xib */,
 				85B51FE3267989E00024C531 /* MemberTableViewController.h */,
 				85B51FE4267989E00024C531 /* MemberTableViewController.m */,
 			);
-			path = Controller;
+			path = MemberList;
 			sourceTree = "<group>";
 		};
-		85D90C2A268D935400804569 /* Utils */ = {
+		85D90C332693E0A600804569 /* DiceGenerator */ = {
 			isa = PBXGroup;
 			children = (
-				85D90C2B268D936E00804569 /* RotateImage.h */,
-				85D90C2C268D936E00804569 /* RotateImage.m */,
+				85B51FD4267985AD0024C531 /* DiceViewController.h */,
+				85B51FD5267985AD0024C531 /* DiceViewController.m */,
 			);
-			path = Utils;
+			path = DiceGenerator;
 			sourceTree = "<group>";
 		};
 		85F5F6232660DC1500C03AFE /* Model */ = {

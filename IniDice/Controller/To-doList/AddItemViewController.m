@@ -34,8 +34,8 @@ TodoListModel *item;
     self.navigationItem.title = @"Add Item";
     
     self.tabBarController.tabBar.hidden = YES;
-        
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"SAVE" style:UIBarButtonItemStyleDone target:self action:@selector(addItem:)];
+    
+    NSString *titleRightButton = @"SAVE";
         
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"CANCEL" style:UIBarButtonItemStylePlain target:self action:@selector(cancelAddItem:)];
     
@@ -66,6 +66,7 @@ TodoListModel *item;
             dateText = itemEdit.date;
             timeText = itemEdit.time;
             base64Str = itemEdit.image;
+            titleRightButton = @"DONE";
         }
     } else {
         item = [[TodoListModel alloc] init];
@@ -76,6 +77,8 @@ TodoListModel *item;
         switchTimeStatus = NO;
         priority = 0;
     }
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:titleRightButton style:UIBarButtonItemStyleDone target:self action:@selector(addItem:)];
     
 }
 
@@ -120,7 +123,7 @@ TodoListModel *item;
 }
 
 - (void) cancelAddItem:(UIBarButtonItem *) sender {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"New ToDo Item" message:@"Are you sure to cancel?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"New ToDo Item" message:@"Are you sure to cancel?" preferredStyle:UIAlertControllerStyleActionSheet];
 
     UIAlertAction *addAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         [self dismissViewControllerAnimated:YES completion:nil];

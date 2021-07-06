@@ -6,9 +6,9 @@
 //
 
 #import "SimpleTabBarViewController.h"
-#import "DiceViewController.h"
-#import "MemberTableViewController.h"
-#import "ToDoViewController.h"
+#import "DiceGenerator/DiceViewController.h"
+#import "MemberList/MemberTableViewController.h"
+#import "To-doList/ToDoViewController.h"
 
 @interface SimpleTabBarViewController ()
 

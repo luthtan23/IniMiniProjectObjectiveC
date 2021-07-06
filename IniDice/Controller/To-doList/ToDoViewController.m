@@ -35,6 +35,9 @@ TodoListDB *todolistDB;
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewItem:)];
+    
+    self.tableView.tableFooterView = [UIView new];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -63,13 +66,15 @@ TodoListDB *todolistDB;
     if (item.isEdit) {
         NSInteger number = item.indexNumber;
         [self.items replaceObjectAtIndex:number withObject:item];
-        [imageViewsArray replaceObjectAtIndex:number withObject:[self decodeBase64ToImage:item.image]];
+        if (!(item.image.length == 0)) [imageViewsArray replaceObjectAtIndex:number withObject:[self decodeBase64ToImage:item.image]];
+        else [imageViewsArray replaceObjectAtIndex:number withObject:[NSNull null]];
         [todolistDB updateData:item];
         [self.tableView reloadData];
     } else {
-        [self.items addObject:item];
-        [imageViewsArray addObject:[self decodeBase64ToImage:item.image]];
+        if (!(item.image.length == 0)) [imageViewsArray addObject:[self decodeBase64ToImage:item.image]];
+        else [imageViewsArray addObject:[NSNull null]];
         [todolistDB saveData:item];
+        items = [todolistDB showAllData];
         
         [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.items.count - 1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
@@ -136,6 +141,7 @@ TodoListDB *todolistDB;
     UIAlertAction *addAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         [todolistDB deleteData:self.items[indexPath.row]];
         [self.items removeObjectAtIndex:indexPath.row];
+        [imageViewsArray removeObjectAtIndex:indexPath.row];
         [self.tableView reloadData];
     }];
     

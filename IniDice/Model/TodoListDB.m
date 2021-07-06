@@ -71,7 +71,6 @@
                 todoList.isComplete = [[NSString stringWithUTF8String:(char *) sqlite3_column_text(statement, 9)] boolValue];
                 [retArr addObject:todoList];
                 todoList = nil;
-                NSLog(@"SHOW, %@", retArr);
             }
         } else {  NSLog( @"ERROR GET DATA" );  }
         
