@@ -23,9 +23,8 @@
 
 NSString *cellIdStatic = @"cellId", *titleText, *descText, *dateText, *timeText, *base64Str = @"";
 NSArray* array;
-NSInteger firstRow = 0, secondRow = 1, priority = 0;
+NSInteger firstRow = 0, secondRow = 1, priority = 0, heightDateExpandable = 0;
 BOOL collapse = NO, switchDateStatus = NO, switchTimeStatus = NO;
-NSMutableArray* expandableArray;
 TodoListModel *item;
 
 - (void)viewDidLoad {
@@ -45,7 +44,6 @@ TodoListModel *item;
     simpleTableView.showsHorizontalScrollIndicator = NO;
     simpleTableView.showsVerticalScrollIndicator = NO;
     [simpleTableView registerNib:[UINib nibWithNibName:@"AddItemTableTableViewCell" bundle:nil] forCellReuseIdentifier:cellIdStatic];
-    expandableArray = @[@"One", @"Two"].mutableCopy;
     
     [self setConstraint];
     
@@ -76,6 +74,7 @@ TodoListModel *item;
         switchDateStatus = NO;
         switchTimeStatus = NO;
         priority = 0;
+        heightDateExpandable = 0;
     }
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:titleRightButton style:UIBarButtonItemStyleDone target:self action:@selector(addItem:)];
@@ -163,17 +162,6 @@ TodoListModel *item;
     
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-     NSInteger defaultSection = 0;
-     if (indexPath.section == 3) {
-         return 300;
-     } else {
-         return 54;
-     }
-     return defaultSection;
-}
-
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
     NSString *defaultSection = nil;
     if (section == 3) {
@@ -184,6 +172,37 @@ TodoListModel *item;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 4;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+     NSInteger defaultSection = 0;
+     if (indexPath.section == 3) {
+         return 300;
+     } else if (indexPath.section == 1) {
+         if (indexPath.row == 1) {
+             return heightDateExpandable;
+         } else {
+             return 54;
+         }
+     } else {
+         return 54;
+     }
+     return defaultSection;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    NSInteger defaultSection = 0;
+    if (section == 0) {
+        return 2;
+    } else if(section == 1) {
+        return 3;
+    } else if (section == 2) {
+        return 1;
+    } else if (section == 3) {
+        return 1;
+    }
+    return defaultSection;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -213,6 +232,10 @@ TodoListModel *item;
             } else [cell.switchItemTable setOn:NO animated:YES];
         }
         if (indexPath.row == 1) {
+            [self setTestingExpandable: cell];
+            [cell configureImageActivity];
+        }
+        if (indexPath.row == 2) {
             [cell.switchItemTable addTarget:self action:@selector(setStatusSwitchRow1:withEvent:) forControlEvents:UIControlEventTouchUpInside];
             if (itemEdit != nil) {
                 if (![itemEdit.time isEqualToString:@""]) {
@@ -266,26 +289,11 @@ TodoListModel *item;
     }
 }
 
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSInteger defaultSection = 0;
-    if (section == 0) {
-        return 2;
-    } else if(section == 1) {
-        return 2;
-    } else if (section == 2) {
-        return 1;
-    } else if (section == 3) {
-        return 1;
-    }
-    return defaultSection;
-}
-
 - (void) setValueItemTableCell {
     array = @[
         [[ItemTableCell alloc] initWithTitle:@"Date" detail:@"detail" imageItemTable:@"calendar"],
+        [[ItemTableCell alloc] initWithTitle:@"" detail:@"" imageItemTable:@"timer"],
         [[ItemTableCell alloc] initWithTitle:@"Time" detail:@"detail" imageItemTable:@"timer"]
-        
     ];
 }
 
@@ -302,7 +310,9 @@ TodoListModel *item;
     [pickerView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active = YES;
     
     datePicker = [[UIDatePicker alloc] init];
-    datePicker.preferredDatePickerStyle = UIDatePickerStyleInline;
+    if (@available(iOS 14.0, *)) {
+        datePicker.preferredDatePickerStyle = UIDatePickerStyleInline;
+    }
     datePicker.backgroundColor = [UIColor whiteColor];
     
     if (isDateSelected) {
@@ -387,6 +397,7 @@ TodoListModel *item;
 }
 
 - (void) setStatusSwitchRow0:(UIButton*) sender withEvent:(UIEvent *) event{
+    [simpleTableView beginUpdates];
     [self hideKeyboard];
     switchDateStatus = !switchDateStatus;
     if (switchDateStatus) {
@@ -396,11 +407,15 @@ TodoListModel *item;
         dateText = [dateFormatter stringFromDate:today];
         [self setDateField:firstRow canceling:NO];
         [self datePickerAttribute:YES];
+        heightDateExpandable = 100;
+        
     } else {
         NSLog(@"TEST BUTTON ACTIVE");
         [self setDateField:firstRow canceling:YES];
         dateText = @"";
+        heightDateExpandable = 0;
     }
+    [simpleTableView endUpdates];
 }
 
 - (void) setStatusSwitchRow1:(UIButton*) sender withEvent:(UIEvent *) event{
@@ -557,9 +572,25 @@ TodoListModel *item;
     [cell.contentView addSubview:imageButton];
 }
 
+- (void) setTestingExpandable:(AddItemTableTableViewCell* ) cell {
+    UIView* viewExpandable = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+    cell.textLabel.text = @"TEST";
+    [cell.contentView addSubview:viewExpandable];
+}
+
 - (UIImage *)decodeBase64ToImage:(NSString *)strEncodeData {
   NSData *data = [[NSData alloc]initWithBase64EncodedString:strEncodeData options:NSDataBase64DecodingIgnoreUnknownCharacters];
   return [UIImage imageWithData:data];
+}
+
+-(BOOL) textLimit:(NSString* ) existingText newText:(NSString*) newString limit:(NSInteger) limit{
+    NSString* text = existingText ?: @"";
+    BOOL isLimit = text.length + newString.length <= limit;
+    return isLimit;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    return [self textLimit:textField.text newText:string limit:10];
 }
 
     
