@@ -32,7 +32,6 @@ TodoListDB *todolistDB;
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
     
     self.navigationItem.title = @"To-Do List";
-    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewItem:)];
     
@@ -154,11 +153,6 @@ TodoListDB *todolistDB;
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-     return 180;
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -170,5 +164,6 @@ TodoListDB *todolistDB;
   NSData *data = [[NSData alloc]initWithBase64EncodedString:strEncodeData options:NSDataBase64DecodingIgnoreUnknownCharacters];
   return [UIImage imageWithData:data];
 }
+
 
 @end

@@ -13,7 +13,6 @@
 
 - (void) configureCell {
     activityTodo = [[UITextField alloc]initWithFrame:CGRectMake(16, 0, self.contentView.frame.size.width, self.contentView.frame.size.height)];
-    activityTodo.textColor = [UIColor blackColor];
     [self.contentView addSubview:activityTodo];
     [self setHidenAttribute:false];
 }

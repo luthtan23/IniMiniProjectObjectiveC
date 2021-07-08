@@ -23,9 +23,7 @@ NSArray *members;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.title = @"Member ANJAY";
-    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
     
     members = [[NSArray alloc]init];
     
