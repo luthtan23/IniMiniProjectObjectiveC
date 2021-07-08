@@ -20,9 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, retain) UITableView *simpleTableView;
 @property(nonatomic,retain) UIDatePicker *datePicker;
-@property(nonatomic,retain) UIView *pickerView;
-@property(nonatomic,retain) UIView *timeBackgroundView;
-@property(nonatomic,retain) UIButton *pickerButton;
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
 
 @property (assign) TodoListModel *itemEdit;

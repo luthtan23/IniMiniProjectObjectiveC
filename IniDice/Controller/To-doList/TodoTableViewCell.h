@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *descTodo;
 @property (weak, nonatomic) IBOutlet UIImageView *dateImage;
 @property (weak, nonatomic) IBOutlet UIImageView *timeImage;
+@property (weak, nonatomic) IBOutlet UIView *contentViewCell;
 
 - (void)configureCell:(TodoListModel *) item image:(UIImage*)imageData;
 

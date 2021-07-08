@@ -26,9 +26,8 @@ int result1, result2, resTotal = 0;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.title = @"Dice Generator Mantap";
-    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+    self.view.backgroundColor = [UIColor systemBackgroundColor];
     
     [self setInitComponent];
     
@@ -96,10 +95,10 @@ int result1, result2, resTotal = 0;
     [textDice2 setFont:[UIFont fontWithName:@"Arial" size:30.0f]];
     [textTotal setFont:[UIFont fontWithName:@"Arial" size:32.0f]];
     [textTitleTotal setFont:[UIFont fontWithName:@"Arial" size:40.0f]];
-    textDice1.textColor = [UIColor blackColor];
-    textDice2.textColor = [UIColor blackColor];
-    textTotal.textColor = [UIColor blackColor];
-    textTitleTotal.textColor = [UIColor blackColor];
+    textDice1.textColor = [UIColor colorNamed:@"text_dynamic"];
+    textDice2.textColor = [UIColor colorNamed:@"text_dynamic"];
+    textTotal.textColor = [UIColor colorNamed:@"text_dynamic"];
+    textTitleTotal.textColor = [UIColor colorNamed:@"text_dynamic"];
     [self setStatusbuttonDice:NO];
     [self.view addSubview: picker];
     [self.view addSubview:textDice1];

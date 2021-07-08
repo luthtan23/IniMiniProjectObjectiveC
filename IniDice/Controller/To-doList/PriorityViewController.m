@@ -20,7 +20,7 @@ NSString *cellIdPriority = @"priorityId", *priorityText = @"";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
     self.navigationItem.title = @"Select Priority";
 
     
@@ -36,23 +36,14 @@ NSString *cellIdPriority = @"priorityId", *priorityText = @"";
 }
 
 - (void) setConstraint{
-    UIView *templatePriority = [[UIView alloc] init];
-    templatePriority.backgroundColor = [UIColor secondarySystemBackgroundColor];
-    [self.view addSubview:templatePriority];
 
-    templatePriority.translatesAutoresizingMaskIntoConstraints = NO;
-    [templatePriority.topAnchor constraintEqualToAnchor:self.view.topAnchor].active = YES;
-    [templatePriority.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
-    [templatePriority.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor].active = YES;
-    [templatePriority.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active = YES;
-
-    [templatePriority addSubview:priorityTableView];
+    [self.view addSubview:priorityTableView];
     
     priorityTableView.translatesAutoresizingMaskIntoConstraints = NO;
-    [priorityTableView.topAnchor constraintEqualToAnchor:templatePriority.topAnchor].active = YES;
-    [priorityTableView.bottomAnchor constraintEqualToAnchor:templatePriority.bottomAnchor].active = YES;
-    [priorityTableView.leadingAnchor constraintEqualToAnchor:templatePriority.leadingAnchor constant:20].active = YES;
-    [priorityTableView.trailingAnchor constraintEqualToAnchor:templatePriority.trailingAnchor constant:-20].active = YES;
+    [priorityTableView.topAnchor constraintEqualToAnchor:self.view.topAnchor].active = YES;
+    [priorityTableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
+    [priorityTableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:20].active = YES;
+    [priorityTableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-20].active = YES;
     
 }
 
