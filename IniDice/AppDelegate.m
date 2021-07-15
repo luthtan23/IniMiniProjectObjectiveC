@@ -19,6 +19,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [self setNotificationPermission];
+
+    
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    center.delegate = self;
+
     return YES;
 }
 
@@ -39,6 +45,29 @@
     // Called when the user discards a scene session.
     // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
     // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+}
+
+- (void) setNotificationPermission{
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    center.delegate = self;
+    [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+        if (!error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[UIApplication sharedApplication] registerForRemoteNotifications];
+            });
+            NSLog( @"Push registration success." );
+            if (granted) {
+                NSLog( @"Push granted success." );
+                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isPermissionDenied"];
+            } else {
+                NSLog( @"Push granted FAILED." );
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isPermissionDenied"];
+            }
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        } else {
+            NSLog( @"Push registration FAILED" );
+        }
+    }];
 }
 
 

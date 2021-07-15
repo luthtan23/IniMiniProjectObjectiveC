@@ -6,10 +6,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <UserNotifications/UserNotifications.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ToDoViewController : UITableViewController
+@interface ToDoViewController : UITableViewController <UNUserNotificationCenterDelegate>
 
 @property (nonatomic) NSMutableArray *items;
 

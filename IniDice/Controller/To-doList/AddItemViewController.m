@@ -11,9 +11,9 @@
 #import "PriorityViewController.h"
 #import "TodoListModel.h"
 #import <Photos/Photos.h>
-#import "RotateImage.h"
+#import "Util.h"
 
-@interface AddItemViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface AddItemViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAdaptivePresentationControllerDelegate>
 
 @end
 
@@ -21,25 +21,44 @@
 
 @synthesize delegate, simpleTableView, datePicker, imageButton, itemEdit;
 
-NSString *cellIdStatic = @"cellId", *titleText, *descText, *dateText, *timeText, *base64Str = @"";
+NSString *cellIdStatic = @"cellId";
+NSString *titleText;
+NSString *descText;
+NSString *dateText;
+NSString *timeText;
+NSString *titleRightButton;
+NSString *base64Str = @"";
 NSArray* array;
-NSInteger firstRow = 0, secondRow = 1, thirdRow = 2, priority = 0, heightDateExpandable = 0, heightTimeExpandable = 0;
-BOOL collapse = NO, switchDateStatus, switchTimeStatus, isExpandableDate = NO, isExpandableTime = NO;
-TodoListModel *item;
-int sizeExpandDate = 330, sizeExpandTime = 54;
+NSInteger firstRow = 0;
+NSInteger secondRow = 1;
+NSInteger thirdRow = 2;
+NSInteger priority = 0;
+NSInteger heightDateExpandable = 0;
+NSInteger heightTimeExpandable = 0;
+BOOL switchDateStatus = NO;
+BOOL switchTimeStatus = NO;
+BOOL isExpandableDate = NO;
+BOOL isExpandableTime = NO;
+BOOL isDateScrolling = NO;
+int sizeExpandDate = 330;
+int sizeExpandTime = 54;
+int sizeImageTable = 300;
+int sizeDefaultTable = 54;
+int constantNumberSimpleTableView = 20;
 UIImage *editImage;
+TodoListModel *item;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+        
     self.navigationItem.title = @"Add Item";
-    
+
     self.tabBarController.tabBar.hidden = YES;
     self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
-    
-    NSString *titleRightButton = @"SAVE";
         
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"CANCEL" style:UIBarButtonItemStylePlain target:self action:@selector(cancelAddItem:)];
+    titleRightButton = @"Save";
+        
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancelAddItem:)];
     
     simpleTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     simpleTableView.delegate = self;
@@ -57,18 +76,27 @@ UIImage *editImage;
     heightDateExpandable = 0;
     heightTimeExpandable = 0;
     
-    if (itemEdit != nil) {
-        if (itemEdit.isEdit) {
-            self.navigationItem.title = @"Edit Item";
-            editImage = [self decodeBase64ToImage:itemEdit.image];
-            if (!(itemEdit.date.length == 0) || ![itemEdit.date isEqualToString:@""]) switchDateStatus = YES;
-            if (!(itemEdit.time.length == 0) || ![itemEdit.time isEqualToString:@""]) switchTimeStatus = YES;
-            dateText = itemEdit.date;
-            timeText = itemEdit.time;
-            base64Str = itemEdit.image;
+    editImage = [UIImage systemImageNamed:@"plus"];
+    imageButton.imageView.layer.transform = CATransform3DMakeScale(3, 3, 3);
+    
+    if (itemEdit != nil && itemEdit.isEdit) {
+        titleRightButton = @"Done";
+        self.navigationItem.title = @"Edit Item";
+        if (!(itemEdit.date.length == 0) || ![itemEdit.date isEqualToString:@""]) switchDateStatus = YES;
+        if (!(itemEdit.time.length == 0) || ![itemEdit.time isEqualToString:@""]) switchTimeStatus = YES;
+        if (![itemEdit.image isEqual:@""]) {
+            editImage = [[Util new] decodeBase64ToImage:itemEdit.image];
         }
+        dateText = itemEdit.date;
+        timeText = itemEdit.time;
+        base64Str = itemEdit.image;
+        titleText = itemEdit.name;
+        descText = itemEdit.desc;
+        priority = itemEdit.priority;
     } else {
         item = [[TodoListModel alloc] init];
+        titleText = [[NSString alloc] init];
+        descText = [[NSString alloc] init];
         dateText = [[NSString alloc] init];
         timeText = [[NSString alloc] init];
         base64Str = [[NSString alloc] init];
@@ -85,15 +113,25 @@ UIImage *editImage;
     
 }
 
-- (void)hideKeyboard
-{
+- (void)viewDidAppear:(BOOL)animated {
+//    self.presentationController.delegate = self;
+}
+
+
+- (void)hideKeyboard {
     [self.view endEditing:YES];
 }
 
-- (void) addItem:(UIBarButtonItem *) sender {
-    [self setTextFieldValue:firstRow];
-    [self setTextFieldValue:secondRow];
-    if (![titleText  isEqual: @""]) {
+//- (void)presentationControllerDidAttemptToDismiss:(UIPresentationController *)presentationController{
+//    [self setCancelDialog];
+//}
+//
+//- (BOOL)presentationControllerShouldDismiss:(UIPresentationController *)presentationController{
+//    return NO;
+//}
+
+- (void)addItem:(UIBarButtonItem *) sender {
+    if (![titleText isEqual: @""]) {
         if (itemEdit.isEdit) {
             item = [[TodoListModel alloc] initWithIdTodoList:itemEdit.idTodoList name:titleText desc:descText date:dateText time:timeText priotiry:priority image:base64Str isEdit:YES indexNumber:itemEdit.indexNumber isComplete:itemEdit.isComplete];
         } else {
@@ -113,23 +151,11 @@ UIImage *editImage;
     
 }
 
-- (void) setTextFieldValue:(NSInteger) rowAt{
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowAt inSection:0];
-    AddItemTableTableViewCell *cell = [simpleTableView cellForRowAtIndexPath:indexPath];
-    cell.activityTodo.delegate = self;
-    if (rowAt == firstRow) {
-        titleText = cell.activityTodo.text;
-    }
-    if (rowAt == secondRow) {
-        descText = cell.activityTodo.text;
-    }
-}
-
-- (void) cancelAddItem:(UIBarButtonItem *) sender {
+- (void)cancelAddItem:(UIBarButtonItem *) sender {
     [self setCancelDialog];
 }
 
-- (void) setCancelDialog{
+- (void)setCancelDialog {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                                                              message:nil
                                                                       preferredStyle:UIAlertControllerStyleActionSheet];
@@ -139,7 +165,8 @@ UIImage *editImage;
     }];
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        
+        [self.simpleTableView reloadData];
+
     }];
     
     [alertController addAction:addAction];
@@ -147,20 +174,19 @@ UIImage *editImage;
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
-- (void) setConstraint{
+- (void)setConstraint {
     
     [self.view addSubview:simpleTableView];
     
     simpleTableView.translatesAutoresizingMaskIntoConstraints = NO;
     [simpleTableView.topAnchor constraintEqualToAnchor:self.view.topAnchor].active = YES;
     [simpleTableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
-    [simpleTableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:20].active = YES;
-    [simpleTableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-20].active = YES;
-    
+    [simpleTableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:constantNumberSimpleTableView].active = YES;
+    [simpleTableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-constantNumberSimpleTableView].active = YES;
     
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     NSString *defaultSection = nil;
     if (section == 3) {
         return @"Add Image Activity";
@@ -168,27 +194,27 @@ UIImage *editImage;
     return defaultSection;
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 4;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-     NSInteger defaultSection = 0;
-     if (indexPath.section == 3) {
-         return 300;
-     } else if (indexPath.section == 1) {
-         if (indexPath.row == 1) {
-             return heightDateExpandable;
-         } else if (indexPath.row == 3) {
-             return heightTimeExpandable;
-         } else {
-             return 54;
-         }
-     } else {
-         return 54;
-     }
-     return defaultSection;
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSInteger defaultSection = 0;
+    if (indexPath.section == 1) {
+        if (indexPath.row == 1) {
+            return heightDateExpandable;
+        } else if (indexPath.row == 3) {
+            return heightTimeExpandable;
+        } else {
+            return sizeDefaultTable;
+        }
+    }
+    else if (indexPath.section == 3) {
+        return sizeImageTable;
+    } else {
+        return sizeDefaultTable;
+    }
+    return defaultSection;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -205,16 +231,56 @@ UIImage *editImage;
     return defaultSection;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return CGFLOAT_MIN;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return nil;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return nil;
+}
+
+- (void)textFieldDidChangeTitleText:(UITextField *)textField {
+    titleText = textField.text;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:firstRow inSection:0];
+    AddItemTableTableViewCell *cell = [simpleTableView cellForRowAtIndexPath:indexPath];
+    if ([titleText isEqual:@""]) {
+        cell.activityTodo.placeholder = @"Title";
+    }
+}
+
+- (void)textFieldDidChangeDescText:(UITextField *)textField {
+    descText = textField.text;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:secondRow inSection:0];
+    AddItemTableTableViewCell *cell = [simpleTableView cellForRowAtIndexPath:indexPath];
+    if ([descText isEqual:@""]) {
+        cell.activityTodo.placeholder = @"Description";
+    }
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     AddItemTableTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdStatic forIndexPath:indexPath];
     if (indexPath.section == 0) {
         cell.activityTodo.delegate = self;
         [cell configureCell];
-        if (indexPath.row == 0) cell.activityTodo.placeholder = @"Title";
-        if (indexPath.row == 1) cell.activityTodo.placeholder = @"Description";
-        if (itemEdit.isEdit) {
-            if (indexPath.row == 0) cell.activityTodo.text = itemEdit.name;
-            if (indexPath.row == 1) cell.activityTodo.text = itemEdit.desc;
+        if (indexPath.row == 0) {
+            [cell.activityTodo addTarget:self action:@selector(textFieldDidChangeTitleText:) forControlEvents:UIControlEventEditingChanged];
+            if (titleText.length == 0 || [titleText isEqual:@""]) {
+                cell.activityTodo.placeholder = @"Title";
+            } else {
+                cell.activityTodo.text = titleText;
+            }
+        }
+        if (indexPath.row == 1) {
+            [cell.activityTodo addTarget:self action:@selector(textFieldDidChangeDescText:) forControlEvents:UIControlEventEditingChanged];
+            if (descText.length == 0 || [descText isEqual:@""]) {
+                cell.activityTodo.placeholder = @"Description";
+            } else {
+                cell.activityTodo.text = descText;
+            }
         }
     } else if (indexPath.section == 1) {
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -223,54 +289,43 @@ UIImage *editImage;
         [cell configureSectionTwo:itemTable];
         if (indexPath.row == 0) {
             [cell.switchItemTable addTarget:self action:@selector(setStatusSwitchRow0:withEvent:) forControlEvents:UIControlEventTouchUpInside];
-            if (itemEdit != nil) {
-                if (![dateText isEqualToString:@""]) {
-                    [cell.switchItemTable setOn:YES animated:YES];
-                    cell.titleItemTable.text = dateText;
-                }
-                else [cell.switchItemTable setOn:NO animated:YES];
-            } else [cell.switchItemTable setOn:NO animated:YES];
+            if (![dateText isEqualToString:@""]) {
+                [cell.switchItemTable setOn:YES animated:YES];
+                cell.titleItemTable.text = dateText;
+            }
+            else [cell.switchItemTable setOn:NO animated:YES];
         }
         if (indexPath.row == 1) {
-            [self setDateExpandable: cell];
-            [cell configureImageActivity];
+            if (!isDateScrolling) {
+                [self setDateExpandable: cell];
+                [cell configureImageActivity];
+            }
         }
         if (indexPath.row == 2) {
             [cell.switchItemTable addTarget:self action:@selector(setStatusSwitchRow1:withEvent:) forControlEvents:UIControlEventTouchUpInside];
-            if (itemEdit != nil) {
-                if (![timeText isEqualToString:@""]) {
-                    [cell.switchItemTable setOn:YES animated:YES];
-                    cell.titleItemTable.text = timeText;
-                }
-                else [cell.switchItemTable setOn:NO animated:YES];
-            } else [cell.switchItemTable setOn:NO animated:YES];
+            if (![timeText isEqualToString:@""]) {
+                [cell.switchItemTable setOn:YES animated:YES];
+                cell.titleItemTable.text = timeText;
+            }
+            else [cell.switchItemTable setOn:NO animated:YES];
         }
         if (indexPath.row == 3) {
-            [self setTimeExpandable: cell];
-            [cell configureImageActivity];
+            if (!isDateScrolling) {
+                [self setTimeExpandable: cell];
+                [cell configureImageActivity];
+            }
+            isDateScrolling = YES;
         }
     } else if (indexPath.section == 2) {
-        if (itemEdit != nil) [cell configurePriority:item.priority];
-        else [cell configurePriority:priority];
+        [cell configurePriority:priority];
     } else if (indexPath.section == 3) {
         [cell configureImageActivity];
         [self setButtonImageSelected:cell];
-        if (itemEdit != nil) {
-            if (!(editImage == nil)) {
-                [imageButton setImage:editImage forState:UIControlStateNormal];
-                imageButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
-                imageButton.imageView.layer.transform = CATransform3DMakeScale(1, 1, 1);
-            } else {
-                [imageButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal];
-                imageButton.imageView.layer.transform = CATransform3DMakeScale(3, 3, 3);
-                imageButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
-            }
-        }
     }
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self hideKeyboard];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 1) {
@@ -302,7 +357,7 @@ UIImage *editImage;
     }
 }
 
-- (void) setValueItemTableCell {
+- (void)setValueItemTableCell {
     array = @[
         [[ItemTableCell alloc] initWithTitle:@"Date" detail:@"detail" imageItemTable:@"calendar"],
         [[ItemTableCell alloc] initWithTitle:@"" detail:@"" imageItemTable:@"timer"],
@@ -311,7 +366,7 @@ UIImage *editImage;
     ];
 }
 
-- (void) setStatusSwitchRow0:(UIButton*) sender withEvent:(UIEvent *) event{
+- (void)setStatusSwitchRow0:(UIButton*) sender withEvent:(UIEvent *) event {
     [simpleTableView beginUpdates];
     [self hideKeyboard];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:1];
@@ -319,14 +374,12 @@ UIImage *editImage;
     switchDateStatus = !switchDateStatus;
     if (switchDateStatus) {
         NSDate *today = [NSDate date];
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"dd-MM-yyyy"];
-        dateText = [dateFormatter stringFromDate:today];
+        dateText = [[[Util new] dateFormatter] stringFromDate:today];
         [self setDateField:firstRow canceling:NO];
         heightDateExpandable = sizeExpandDate;
         
     } else {
-        NSLog(@"TEST BUTTON ACTIVE");
+        NSLog(@"TEST BUTTON NOT ACTIVE");
         [self setDateField:firstRow canceling:YES];
         [self setDateField:thirdRow canceling:YES];
         [cell.switchItemTable setOn:NO animated:YES];
@@ -339,7 +392,7 @@ UIImage *editImage;
     [simpleTableView endUpdates];
 }
 
-- (void) setStatusSwitchRow1:(UIButton*) sender withEvent:(UIEvent *) event{
+- (void)setStatusSwitchRow1:(UIButton *) sender withEvent:(UIEvent *) event {
     [simpleTableView beginUpdates];
     [self hideKeyboard];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
@@ -348,17 +401,14 @@ UIImage *editImage;
     if (switchTimeStatus) {
         [cell.switchItemTable setOn:YES animated:YES];
         NSDate *today = [NSDate date];
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"hh:mm a"];
-        timeText = [dateFormatter stringFromDate:today];
-        [dateFormatter setDateFormat:@"dd-MM-yyyy"];
-        dateText = [dateFormatter stringFromDate:today];
+        dateText = [[[Util new] dateFormatter] stringFromDate:today];
+        timeText = [[[Util new] timeFormatter] stringFromDate:today];
         switchDateStatus = YES;
         [self setDateField:firstRow canceling:NO];
         [self setDateField:thirdRow canceling:NO];
         heightTimeExpandable = sizeExpandTime;
     } else {
-        NSLog(@"TEST BUTTON ACTIVE");
+        NSLog(@"TEST BUTTON NOT ACTIVE");
         [self setDateField:thirdRow canceling:YES];
         timeText = @"";
         heightTimeExpandable = 0;
@@ -366,22 +416,17 @@ UIImage *editImage;
     [simpleTableView endUpdates];
 }
 
-- (void)datePickerChanged:(UIDatePicker *)datePicker
-{
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"dd-MM-yyyy"];
-    dateText = [dateFormatter stringFromDate:datePicker.date];
+- (void)datePickerChanged:(UIDatePicker *)datePicker {
+    dateText = [[[Util new] dateFormatter] stringFromDate:datePicker.date];
     [self setDateField:firstRow canceling:NO];
 }
 
-- (void) timePickerChanged:(UIDatePicker *)datePicker{
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"hh:mm a"];
-    timeText = [dateFormatter stringFromDate:datePicker.date];
+- (void)timePickerChanged:(UIDatePicker *)datePicker {
+    timeText = [[[Util new] timeFormatter] stringFromDate:datePicker.date];
     [self setDateField:thirdRow canceling:NO];
 }
 
-- (void) setDateField:(NSInteger) rowAt canceling:(BOOL) cancel{
+- (void)setDateField:(NSInteger) rowAt canceling:(BOOL) cancel {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowAt inSection:1];
     AddItemTableTableViewCell *cell = [simpleTableView cellForRowAtIndexPath:indexPath];
     if (!cancel) {
@@ -401,14 +446,14 @@ UIImage *editImage;
     }
 }
 
-- (void) priorityData:(NSInteger) priorityInt priorityText:(NSString*) priorityText{
+- (void)priorityData:(NSInteger) priorityInt priorityText:(NSString *) priorityText {
     priority = priorityInt;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:2];
     AddItemTableTableViewCell *cell = [simpleTableView cellForRowAtIndexPath:indexPath];
     cell.labelPriority.text = priorityText;
 }
 
-- (void)toDoAddImageBtnAction:(id)sender {
+- (void)toDoAddImageBtnAction:(id) sender {
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum]) {
         UIAlertController * alert=   [UIAlertController
                                       alertControllerWithTitle:@"Photo source"
@@ -420,30 +465,50 @@ UIImage *editImage;
                              style:UIAlertActionStyleDefault
                              handler:^(UIAlertAction * action)
                              {
-                                 self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-                                 [self presentViewController:self.imagePicker animated:YES completion:nil];
-                                 [alert dismissViewControllerAnimated:YES completion:nil];
-                                 
+            self.imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+            [self presentViewController:self.imagePicker animated:YES completion:nil];
+            [alert dismissViewControllerAnimated:YES completion:nil];
                              }];
+        
         UIAlertAction* camera = [UIAlertAction
                              actionWithTitle:@"Take photo"
                              style:UIAlertActionStyleDefault
                              handler:^(UIAlertAction * action)
-                             {
-                                 self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-                                self.imagePicker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
-                                self.imagePicker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
-                                [self presentViewController:self.imagePicker animated:YES completion:nil];
-                                 [alert dismissViewControllerAnimated:YES completion:nil];
-                                 
-                             }];
+                            {
+            BOOL test = [[NSUserDefaults standardUserDefaults] boolForKey:@"IsCameraPermission"];
+            if (test) {
+                AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+                if (authStatus == AVAuthorizationStatusAuthorized) {
+                    [self popCamera:alert];
+                }
+                else if (authStatus == AVAuthorizationStatusNotDetermined) {
+                    NSLog(@"%@", @"Camera access not determined. Ask for permission.");
+                    [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+                        if (granted) [self popCamera: alert];
+                        else [self camDenied];
+                    }];
+                }
+                else if (authStatus == AVAuthorizationStatusRestricted) {
+                    NSLog(@"You've been restricted from using the camera on this device.");
+                }
+                else {
+                    [self camDenied];
+
+                }
+            } else {
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"IsCameraPermission"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                [self popCamera: alert];
+            }
+        }];
+        
         UIAlertAction* cancel = [UIAlertAction
                                  actionWithTitle:@"Cancel"
                                  style:UIAlertActionStyleDefault
                                  handler:^(UIAlertAction * action)
                                  {
                                      [alert dismissViewControllerAnimated:YES completion:nil];
-                                 }];
+        }];
         
         [alert addAction:cameraRoll];
         [alert addAction:camera];
@@ -457,35 +522,77 @@ UIImage *editImage;
     
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<UIImagePickerControllerInfoKey,id> *)info{
+- (void)popCamera:(UIViewController *) alert {
+    self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    self.imagePicker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+    [self presentViewController:self.imagePicker animated:YES completion:nil];
+    [alert dismissViewControllerAnimated:YES completion:nil];
+
+}
+
+- (void)camDenied {
+    NSLog(@"%@", @"Denied camera access");
+    
+    NSString *alertText = @"It looks like your privacy settings are preventing us from accessing your camera to do take image. You can fix this by doing the following:\n\n1. Touch the Go button below to open the Settings app.\n\n2. Turn the Camera on.\n\n3. Open this app and try again.";
+        
+    UIAlertController * alert =   [UIAlertController
+                                  alertControllerWithTitle:@"Permission Denied"
+                                  message:alertText
+                                  preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* dialog = [UIAlertAction
+                             actionWithTitle:@"Go"
+                             style:UIAlertActionStyleDefault
+                             handler:^(UIAlertAction * action)
+                             {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    UIAlertAction* cancel = [UIAlertAction
+                             actionWithTitle:@"Next Time"
+                             style:UIAlertActionStyleDefault
+                             handler:^(UIAlertAction * action)
+                             {
+                                 [alert dismissViewControllerAnimated:YES completion:nil];
+    }];
+    [alert addAction:dialog];
+    [alert addAction:cancel];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<UIImagePickerControllerInfoKey,id> *)info {
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     [imageButton setImage:image forState:UIControlStateNormal];
     imageButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     imageButton.imageView.layer.transform = CATransform3DMakeScale(1, 1, 1);
     if (self.imagePicker.sourceType == UIImagePickerControllerSourceTypeCamera) {
-        RotateImage *rotate = [[RotateImage alloc] init];
-        image = [rotate scaleAndRotateImage:image];
+        image = [[Util new] scaleAndRotateImage:image];
     }
-    NSData *imagedata = UIImagePNGRepresentation(image);
-    NSString *base64 = [imagedata base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-    base64Str = base64;
+    base64Str = [[Util new] encodeImageToBase64:image];
+    editImage = image;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)imagePickerControllerDidCancel: (UIImagePickerController *)picker {
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void) setButtonImageSelected:(AddItemTableTableViewCell* ) cell {
+- (void)setButtonImageSelected:(AddItemTableTableViewCell *) cell {
     imageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, cell.contentView.frame.size.width, cell.contentView.frame.size.height)];
-    [imageButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal];
-    imageButton.imageView.layer.transform = CATransform3DMakeScale(3, 3, 3);
+    if (![base64Str isEqual:@""]) {
+        imageButton.imageView.layer.transform = CATransform3DMakeScale(1, 1, 1);
+    } else {
+        imageButton.imageView.layer.transform = CATransform3DMakeScale(3, 3, 3);
+    }
+    [imageButton setImage:editImage forState:UIControlStateNormal];
     imageButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [imageButton addTarget:self action:@selector(toDoAddImageBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [cell.contentView addSubview:imageButton];
 }
 
-- (void) setDateExpandable:(AddItemTableTableViewCell* ) cell {
+- (void)setDateExpandable:(AddItemTableTableViewCell *) cell {
+    [simpleTableView beginUpdates];
     datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(8, 0, cell.contentView.bounds.size.width, sizeExpandDate)];
     if (@available(iOS 14.0, *)) {
         datePicker.preferredDatePickerStyle = UIDatePickerStyleInline;
@@ -493,15 +600,15 @@ UIImage *editImage;
     [datePicker setDatePickerMode:UIDatePickerModeDate];
     [datePicker addTarget:self action:@selector(datePickerChanged:) forControlEvents:UIControlEventValueChanged];
     if (![dateText isEqual:@""]) {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"dd-MM-yyyy"];
-        NSDate *dateBefore =[dateFormatter dateFromString:dateText];
+        NSDate *dateBefore =[[[Util new] dateFormatter] dateFromString:dateText];
         [datePicker setDate:dateBefore];
     }
     [cell.contentView addSubview:datePicker];
+    [datePicker reloadInputViews];
+    [simpleTableView endUpdates];
 }
 
-- (void) setTimeExpandable:(AddItemTableTableViewCell* ) cell {
+- (void)setTimeExpandable:(AddItemTableTableViewCell *) cell {
     datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(8, 0, cell.contentView.bounds.size.width, sizeExpandTime)];
     if (@available(iOS 14.0, *)) {
         datePicker.preferredDatePickerStyle = UIDatePickerStyleInline;
@@ -509,31 +616,22 @@ UIImage *editImage;
     [datePicker setDatePickerMode:UIDatePickerModeTime];
     [datePicker addTarget:self action:@selector(timePickerChanged:) forControlEvents:UIControlEventValueChanged];
     if (![timeText isEqual:@""]) {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"hh:mm a"];
-        NSDate *dateBefore =[dateFormatter dateFromString:timeText];
-        [datePicker setDate:dateBefore];
+        NSDate *timeBefore =[[[Util new] timeFormatter] dateFromString:timeText];
+        [datePicker setDate:timeBefore];
     }
     [cell.contentView addSubview:datePicker];
 }
 
+//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+//    BOOL limitStatus = NO;
+//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:firstRow inSection:1];
+//    AddItemTableTableViewCell *cell = [simpleTableView cellForRowAtIndexPath:indexPath];
+//    if (textField == cell.activityTodo) {
+//        if (textField.text.length < 5 || string.length == 0){ return limitStatus = YES; }
+//        else{ return limitStatus = NO; }
+//    }
+//    return limitStatus;
+//}
 
 
-- (UIImage *)decodeBase64ToImage:(NSString *)strEncodeData {
-  NSData *data = [[NSData alloc]initWithBase64EncodedString:strEncodeData options:NSDataBase64DecodingIgnoreUnknownCharacters];
-  return [UIImage imageWithData:data];
-}
-
--(BOOL) textLimit:(NSString* ) existingText newText:(NSString*) newString limit:(NSInteger) limit{
-    NSString* text = existingText ?: @"";
-    BOOL isLimit = text.length + newString.length <= limit;
-    return isLimit;
-}
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    return [self textLimit:textField.text newText:string limit:10];
-}
-
-
-    
 @end

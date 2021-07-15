@@ -1,17 +1,39 @@
 //
-//  RotateImage.m
+//  Util.m
 //  IniDice
 //
-//  Created by iei19100004 on 01/07/21.
+//  Created by iei19100004 on 12/07/21.
 //
 
-#import "RotateImage.h"
+#import "Util.h"
 
-@implementation RotateImage
+@implementation Util
 
-- (UIImage *) scaleAndRotateImage: (UIImage *)image
-{
-    int kMaxResolution = 3000; // Or whatever
+- (NSDateFormatter*) dateFormatter {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"dd-MM-yyyy"];
+    return dateFormatter;
+}
+
+- (NSDateFormatter*) timeFormatter {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"hh:mm a"];
+    return dateFormatter;
+}
+
+- (UIImage *)decodeBase64ToImage:(NSString *)strEncodeData {
+  NSData *data = [[NSData alloc]initWithBase64EncodedString:strEncodeData options:NSDataBase64DecodingIgnoreUnknownCharacters];
+  return [UIImage imageWithData:data];
+}
+
+- (NSString*)encodeImageToBase64:(UIImage *)image {
+    NSData *imagedata = UIImagePNGRepresentation(image);
+    NSString *base64 = [imagedata base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    return base64;
+}
+
+- (UIImage *) scaleAndRotateImage: (UIImage *)image {
+    int kMaxResolution = 3000;
 
     CGImageRef imgRef = image.CGImage;
 
