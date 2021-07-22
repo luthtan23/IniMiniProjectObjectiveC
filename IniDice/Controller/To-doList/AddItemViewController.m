@@ -19,7 +19,7 @@
 
 @implementation AddItemViewController
 
-@synthesize delegate, simpleTableView, datePicker, imageButton, itemEdit;
+@synthesize delegate, simpleTableView, datePicker, imageButton, itemEdit, deleteImageButton;
 
 NSString *cellIdStatic = @"cellId";
 NSString *titleText;
@@ -54,6 +54,8 @@ TodoListModel *item;
     self.navigationItem.title = @"Add Item";
 
     self.tabBarController.tabBar.hidden = YES;
+    self.navigationController.presentationController.delegate = self;
+    
     self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
         
     titleRightButton = @"Save";
@@ -73,6 +75,7 @@ TodoListModel *item;
     
     switchDateStatus = NO;
     switchTimeStatus = NO;
+    isDateScrolling = NO;
     heightDateExpandable = 0;
     heightTimeExpandable = 0;
     
@@ -113,22 +116,27 @@ TodoListModel *item;
     
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-//    self.presentationController.delegate = self;
-}
-
-
 - (void)hideKeyboard {
     [self.view endEditing:YES];
 }
 
-//- (void)presentationControllerDidAttemptToDismiss:(UIPresentationController *)presentationController{
-//    [self setCancelDialog];
-//}
-//
-//- (BOOL)presentationControllerShouldDismiss:(UIPresentationController *)presentationController{
-//    return NO;
-//}
+- (void)presentationControllerDidAttemptToDismiss:(UIPresentationController *)presentationController{
+    [self setCancelDialog];
+}
+
+- (BOOL)presentationControllerShouldDismiss:(UIPresentationController *)presentationController{
+    BOOL saveState = NO;
+    if (itemEdit != nil) {
+        if (titleText == itemEdit.name && descText == itemEdit.desc && dateText == itemEdit.date && timeText == itemEdit.time && priority == itemEdit.priority && base64Str == itemEdit.image) {
+            saveState = YES;
+        }
+    } else {
+        if ([titleText isEqual:@""] && [descText isEqual:@""] && [dateText isEqual:@""] && [timeText isEqual:@""] && priority == 0 && [base64Str isEqual:@""]) {
+            saveState = YES;
+        }
+    }
+    return saveState;
+}
 
 - (void)addItem:(UIBarButtonItem *) sender {
     if (![titleText isEqual: @""]) {
@@ -156,6 +164,7 @@ TodoListModel *item;
 }
 
 - (void)setCancelDialog {
+    [simpleTableView beginUpdates];
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil
                                                                              message:nil
                                                                       preferredStyle:UIAlertControllerStyleActionSheet];
@@ -165,7 +174,7 @@ TodoListModel *item;
     }];
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        [self.simpleTableView reloadData];
+        [self.simpleTableView endUpdates];
 
     }];
     
@@ -571,6 +580,9 @@ TodoListModel *item;
     }
     base64Str = [[Util new] encodeImageToBase64:image];
     editImage = image;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:3];
+    AddItemTableTableViewCell *cell = [simpleTableView cellForRowAtIndexPath:indexPath];
+    [cell.contentView addSubview:deleteImageButton];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -580,15 +592,32 @@ TodoListModel *item;
 
 - (void)setButtonImageSelected:(AddItemTableTableViewCell *) cell {
     imageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, cell.contentView.frame.size.width, cell.contentView.frame.size.height)];
-    if (![base64Str isEqual:@""]) {
-        imageButton.imageView.layer.transform = CATransform3DMakeScale(1, 1, 1);
-    } else {
-        imageButton.imageView.layer.transform = CATransform3DMakeScale(3, 3, 3);
-    }
     [imageButton setImage:editImage forState:UIControlStateNormal];
     imageButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [imageButton addTarget:self action:@selector(toDoAddImageBtnAction:) forControlEvents:UIControlEventTouchUpInside];
     [cell.contentView addSubview:imageButton];
+    if (![base64Str isEqual:@""]) {
+        imageButton.imageView.layer.transform = CATransform3DMakeScale(1, 1, 1);
+        [self setDeleteImageButtonAttribute:cell visible:YES];
+    } else {
+        imageButton.imageView.layer.transform = CATransform3DMakeScale(3, 3, 3);
+        [self setDeleteImageButtonAttribute:cell visible:NO];
+    }
+}
+
+- (void)setDeleteImageButtonAttribute:(AddItemTableTableViewCell *) cell visible:(BOOL)state {
+    deleteImageButton = [[UIButton alloc] initWithFrame:CGRectMake(cell.contentView.frame.size.width-35, 5, 30, 30)];
+    deleteImageButton.backgroundColor = [UIColor systemBlueColor];
+    deleteImageButton.clipsToBounds = YES;
+    deleteImageButton.layer.cornerRadius = 30/3.5f;
+    UIImage *deleteImageIcon = [UIImage systemImageNamed:@"trash"];
+    [deleteImageIcon imageWithTintColor:[UIColor redColor]];
+    [deleteImageButton setImage:[deleteImageIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [deleteImageButton setTintColor:[UIColor whiteColor]];
+    [deleteImageButton addTarget:self action:@selector(deleteImageAction:) forControlEvents:UIControlEventTouchUpInside];
+    if (state) {
+        [cell.contentView addSubview:deleteImageButton];
+    }
 }
 
 - (void)setDateExpandable:(AddItemTableTableViewCell *) cell {
@@ -620,6 +649,26 @@ TodoListModel *item;
         [datePicker setDate:timeBefore];
     }
     [cell.contentView addSubview:datePicker];
+}
+
+- (void)deleteImageAction:(id) sender {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Confirm to delete Image" message:@"Are you sure to delete image from your activity item?" preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        base64Str = @"";
+        [self.imageButton setImage:[UIImage systemImageNamed:@"plus"] forState:UIControlStateNormal];
+        self.imageButton.imageView.layer.transform = CATransform3DMakeScale(3, 3, 3);
+        [self.deleteImageButton removeFromSuperview];
+    }];
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }];
+    
+    [alert addAction:deleteAction];
+    [alert addAction:cancel];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 //- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
