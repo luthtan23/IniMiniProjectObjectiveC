@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign) TodoListModel *itemEdit;
 
 @property (strong, nonatomic) UIButton *imageButton;
+@property (strong, nonatomic) UIButton *deleteImageButton;
 
 @property(nonatomic, assign)id delegate;
 

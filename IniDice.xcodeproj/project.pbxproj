@@ -14,7 +14,7 @@
 		851B25B1265B8049006582AD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 851B25B0265B8049006582AD /* main.m */; };
 		851B25BB265B8049006582AD /* IniDiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 851B25BA265B8049006582AD /* IniDiceTests.m */; };
 		851B25C6265B8049006582AD /* IniDiceUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 851B25C5265B8049006582AD /* IniDiceUITests.m */; };
-		857FABD92696C2A60012CE23 /* NotificationTodo.m in Sources */ = {isa = PBXBuildFile; fileRef = 857FABD82696C2A60012CE23 /* NotificationTodo.m */; };
+		85545BD426A7A48800A2C68D /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 85545BD226A7A48800A2C68D /* Util.m */; };
 		859D9D46268AA64C0063F9DA /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 859D9D45268AA64C0063F9DA /* libsqlite3.tbd */; };
 		859D9D5B268AB6CC0063F9DA /* TodoListDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 859D9D5A268AB6CC0063F9DA /* TodoListDB.m */; };
 		85B51FBD26773F2A0024C531 /* AddItemTableTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B51FBB26773F2A0024C531 /* AddItemTableTableViewCell.m */; };
@@ -23,7 +23,6 @@
 		85B51FE5267989E00024C531 /* MemberTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B51FE4267989E00024C531 /* MemberTableViewController.m */; };
 		85C1EF2226687E920092CB28 /* MemberDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C1EF2026687E920092CB28 /* MemberDetailViewController.m */; };
 		85C1EF2326687E920092CB28 /* MemberDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 85C1EF2126687E920092CB28 /* MemberDetailViewController.xib */; };
-		85D90C2D268D936E00804569 /* RotateImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 85D90C2C268D936E00804569 /* RotateImage.m */; };
 		85EB6B61266F041E00B1C4C0 /* ToDoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85EB6B60266F041E00B1C4C0 /* ToDoViewController.m */; };
 		85EB6B6B266F1FED00B1C4C0 /* AddItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 85EB6B69266F1FED00B1C4C0 /* AddItemViewController.m */; };
 		85EB6B72266F209500B1C4C0 /* TodoListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 85EB6B71266F209500B1C4C0 /* TodoListModel.m */; };
@@ -71,8 +70,8 @@
 		851B25C1265B8049006582AD /* IniDiceUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IniDiceUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		851B25C5265B8049006582AD /* IniDiceUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IniDiceUITests.m; sourceTree = "<group>"; };
 		851B25C7265B8049006582AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		857FABD72696C2A60012CE23 /* NotificationTodo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationTodo.h; sourceTree = "<group>"; };
-		857FABD82696C2A60012CE23 /* NotificationTodo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationTodo.m; sourceTree = "<group>"; };
+		85545BD226A7A48800A2C68D /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
+		85545BD326A7A48800A2C68D /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		859D9D45268AA64C0063F9DA /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		859D9D59268AB6CC0063F9DA /* TodoListDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodoListDB.h; sourceTree = "<group>"; };
 		859D9D5A268AB6CC0063F9DA /* TodoListDB.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodoListDB.m; sourceTree = "<group>"; };
@@ -86,8 +85,6 @@
 		85C1EF1F26687E920092CB28 /* MemberDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemberDetailViewController.h; sourceTree = "<group>"; };
 		85C1EF2026687E920092CB28 /* MemberDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MemberDetailViewController.m; sourceTree = "<group>"; };
 		85C1EF2126687E920092CB28 /* MemberDetailViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MemberDetailViewController.xib; sourceTree = "<group>"; };
-		85D90C2B268D936E00804569 /* RotateImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RotateImage.h; sourceTree = "<group>"; };
-		85D90C2C268D936E00804569 /* RotateImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RotateImage.m; sourceTree = "<group>"; };
 		85EB6B5F266F041E00B1C4C0 /* ToDoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ToDoViewController.h; sourceTree = "<group>"; };
 		85EB6B60266F041E00B1C4C0 /* ToDoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToDoViewController.m; sourceTree = "<group>"; };
 		85EB6B68266F1FED00B1C4C0 /* AddItemViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddItemViewController.h; sourceTree = "<group>"; };
@@ -218,10 +215,8 @@
 		85D90C2A268D935400804569 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				85D90C2B268D936E00804569 /* RotateImage.h */,
-				85D90C2C268D936E00804569 /* RotateImage.m */,
-				857FABD72696C2A60012CE23 /* NotificationTodo.h */,
-				857FABD82696C2A60012CE23 /* NotificationTodo.m */,
+				85545BD326A7A48800A2C68D /* Util.h */,
+				85545BD226A7A48800A2C68D /* Util.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -425,10 +420,8 @@
 				85F5F6192660C40900C03AFE /* SimpleTabBarViewController.m in Sources */,
 				85FEA08826771F4F0001D249 /* ItemTableCell.m in Sources */,
 				85F5F6C626685D1700C03AFE /* MemberModel.m in Sources */,
-				85D90C2D268D936E00804569 /* RotateImage.m in Sources */,
 				851B25A0265B8048006582AD /* AppDelegate.m in Sources */,
 				85B51FE5267989E00024C531 /* MemberTableViewController.m in Sources */,
-				857FABD92696C2A60012CE23 /* NotificationTodo.m in Sources */,
 				85EB6B7C266F3AA400B1C4C0 /* TodoTableViewCell.m in Sources */,
 				85B51FD6267985AD0024C531 /* DiceViewController.m in Sources */,
 				85FEA094267720610001D249 /* PriorityViewController.m in Sources */,
@@ -436,6 +429,7 @@
 				85EB6B61266F041E00B1C4C0 /* ToDoViewController.m in Sources */,
 				851B25A3265B8048006582AD /* SceneDelegate.m in Sources */,
 				85C1EF2226687E920092CB28 /* MemberDetailViewController.m in Sources */,
+				85545BD426A7A48800A2C68D /* Util.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

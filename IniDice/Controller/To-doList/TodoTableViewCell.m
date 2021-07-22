@@ -35,8 +35,8 @@
         _dateTodo.textColor = [UIColor colorNamed:@"text_dynamic"];
     }
     if (item.time.length == 0 || [item.time isEqualToString:@""]) {
-        [_timeTodo removeFromSuperview];
-        [_timeImage removeFromSuperview];
+//        [_timeTodo removeFromSuperview];
+//        [_timeImage removeFromSuperview];
         _timeTodo.text = @"none";
         _timeTodo.textColor = [UIColor secondaryLabelColor];
     } else {
